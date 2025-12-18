@@ -1,0 +1,15 @@
+---
+# Monitoring stack deployment on VM2
+- name: Deploy monitoring stack
+  hosts: monitoring
+  become: true
+  roles:
+    - common
+    - docker-host
+    - prometheus
+    - loki
+    - grafana
+  tags:
+    - monitoring
+    - docker
+

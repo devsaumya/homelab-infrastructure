@@ -1,0 +1,32 @@
+---
+# DESTRUCTIVE: Tear down infrastructure
+# WARNING: This will remove services and configurations
+# Use with extreme caution
+- name: Destroy infrastructure
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Confirm destruction
+      pause:
+        prompt: "WARNING: This will destroy infrastructure. Type 'yes' to continue"
+      register: confirmation
+      when: destroy_confirmation != "yes"
+    
+    - name: Remove k3s
+      shell: |
+        /usr/local/bin/k3s-uninstall.sh
+      when: "'k3s_cluster' in group_names"
+      ignore_errors: true
+    
+    - name: Stop Docker containers
+      docker_compose:
+        project_src: "{{ item }}"
+        state: absent
+      loop:
+        - /opt/docker/monitoring
+        - /opt/docker/security
+        - /opt/docker/services
+      when: "'monitoring' in group_names"
+      ignore_errors: true
+

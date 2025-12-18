@@ -1,0 +1,11 @@
+---
+# Bootstrap playbook - Base OS configuration on all VMs
+- name: Bootstrap all hosts
+  hosts: all
+  become: true
+  roles:
+    - common
+  tags:
+    - bootstrap
+    - common
+

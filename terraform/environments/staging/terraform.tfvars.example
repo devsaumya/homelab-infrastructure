@@ -1,0 +1,14 @@
+# Staging environment variables
+# Copy to terraform.tfvars and configure
+
+cloudflare_api_token = "your-staging-api-token"
+cloudflare_zone_id   = "your-staging-zone-id"
+cloudflare_account_id = "your-staging-account-id"
+domain               = "staging.homelab.local"
+
+services = {
+  grafana = "10.0.1.105:3000"
+  traefik = "10.0.1.80:9000"
+  adguard = "10.0.1.53:3000"
+}
+

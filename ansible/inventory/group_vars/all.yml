@@ -1,0 +1,32 @@
+# Common variables for all hosts
+
+# System configuration
+timezone: "UTC"
+locale: "en_US.UTF-8"
+
+# Network configuration
+dns_servers:
+  - "10.0.1.20"  # AdGuard Home
+  - "1.1.1.1"    # Cloudflare fallback
+  - "8.8.8.8"    # Google fallback
+
+# Package management
+package_update: true
+package_upgrade: false  # Set to true for automatic upgrades
+
+# Security
+fail2ban_enabled: true
+ufw_enabled: false  # Managed by OPNsense firewall
+
+# Monitoring
+prometheus_node_exporter_enabled: true
+prometheus_node_exporter_port: 9100
+
+# Logging
+rsyslog_enabled: true
+log_server: "10.0.1.1"  # OPNsense syslog
+
+# Backup
+backup_enabled: true
+backup_retention_days: 30
+

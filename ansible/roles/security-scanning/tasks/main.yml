@@ -1,0 +1,26 @@
+---
+# Security scanning tools installation
+
+- name: Install Trivy
+  shell: |
+    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
+    echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | tee -a /etc/apt/sources.list.d/trivy.list
+    apt-get update
+    apt-get install -y trivy
+  args:
+    creates: /usr/local/bin/trivy
+  when: ansible_os_family == "Debian"
+
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+  when: ansible_os_family == "Debian"
+  notify: restart fail2ban
+
+- name: Configure fail2ban
+  template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+  notify: restart fail2ban
+

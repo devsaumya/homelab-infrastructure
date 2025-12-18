@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+  namespace: cloudflare-tunnel
+data:
+  config.yml: |
+    tunnel: <TUNNEL_ID>
+    credentials-file: /etc/cloudflared/credentials.json
+    
+    ingress:
+      - hostname: homelab.local
+        service: http://traefik.ingress-traefik.svc.cluster.local:80
+      - service: http_status:404
+

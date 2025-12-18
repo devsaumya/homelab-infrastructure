@@ -1,0 +1,10 @@
+---
+# Security tools deployment
+- name: Deploy security tools
+  hosts: all
+  become: true
+  roles:
+    - security-scanning
+  tags:
+    - security
+

@@ -1,0 +1,16 @@
+# Ansible Vault files
+*.vault
+vault.yml
+!vault.yml.example
+
+# Ansible retry files
+*.retry
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*~
+

@@ -1,0 +1,14 @@
+# Copy this file to terraform.tfvars and fill in your values
+# DO NOT commit terraform.tfvars to git
+
+cloudflare_api_token = "your-cloudflare-api-token-here"
+cloudflare_zone_id   = "your-zone-id-here"
+cloudflare_account_id = "your-account-id-here"
+domain               = "homelab.local"
+
+services = {
+  grafana = "10.0.1.105:3000"
+  traefik = "10.0.1.80:9000"
+  adguard = "10.0.1.53:3000"
+}
+

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-internet
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    # Allow HTTPS to external internet
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow HTTP to external internet
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 80
+

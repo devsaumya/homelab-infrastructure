@@ -1,0 +1,54 @@
+---
+# k3s master installation
+
+- name: Create k3s directory
+  file:
+    path: /etc/rancher/k3s
+    state: directory
+    mode: '0755'
+
+- name: Download k3s install script
+  get_url:
+    url: https://get.k3s.io
+    dest: /tmp/install-k3s.sh
+    mode: '0755'
+
+- name: Install k3s server
+  shell: |
+    export K3S_TOKEN="{{ vault_k3s_token }}"
+    export INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --cluster-init"
+    /tmp/install-k3s.sh
+  args:
+    creates: /usr/local/bin/k3s
+  register: k3s_install
+
+- name: Wait for k3s to be ready
+  wait_for:
+    path: /etc/rancher/k3s/k3s.yaml
+    timeout: 300
+  when: k3s_install.changed
+
+- name: Create .kube directory
+  file:
+    path: "{{ ansible_env.HOME }}/.kube"
+    state: directory
+    mode: '0755'
+
+- name: Copy kubeconfig
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: "{{ ansible_env.HOME }}/.kube/config"
+    remote_src: true
+    mode: '0600'
+  when: ansible_user != "root"
+
+- name: Install kubectl
+  shell: |
+    if ! command -v kubectl &> /dev/null; then
+      curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      chmod +x kubectl
+      mv kubectl /usr/local/bin/
+    fi
+  args:
+    creates: /usr/local/bin/kubectl
+

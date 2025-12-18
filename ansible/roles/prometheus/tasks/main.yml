@@ -1,0 +1,21 @@
+---
+# Prometheus installation (via Docker Compose)
+# This role prepares the environment; actual deployment is via docker-compose
+
+- name: Create Prometheus directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /opt/docker/monitoring/prometheus
+    - /data/prometheus
+
+- name: Ensure Prometheus user exists
+  user:
+    name: prometheus
+    system: true
+    shell: /bin/false
+    home: /data/prometheus
+    create_home: true
+
