@@ -21,7 +21,7 @@ The infrastructure consists of:
 - **Kubernetes**: k3s cluster with AdGuard Home, Traefik, cert-manager
 - **Monitoring & Observability**: Prometheus, Grafana, Loki, AlertManager
 
-See [IAC_CODE.md](IAC_CODE.md) for the complete structure and conventions.
+See [Master Documentation](docs/MASTER.md) for complete structure and conventions.
 
 ## Quick Start
 
@@ -139,11 +139,8 @@ homelab-infrastructure/
 
 ## Documentation
 
-- [Architecture](./docs/architecture.md) - System architecture and design decisions
-- [Domain Model](./docs/DOMAIN_MODEL.md) - Dual-domain architecture (home.internal / connect2home.online)
-- [AdGuard DNS Setup](./docs/ADGUARD_DNS_SETUP.md) - Internal DNS configuration guide
-- [Deployment Guide](./docs/DEPLOYMENT.md) - Step-by-step deployment instructions
-- [How to Use](./docs/HOW_TO_USE.md) - Complete usage guide
+- **[Master Documentation](docs/MASTER.md)** - Complete reference guide ⭐ **START HERE**
+- **[Hardware Setup Guide](docs/HARDWARE_SETUP.md)** - Hardware configuration instructions
 
 ## Security
 
@@ -153,18 +150,9 @@ homelab-infrastructure/
 - Firewall rules restrict inter-VLAN communication
 - TLS certificates via Let's Encrypt
 
-## Documentation
-
-- **[How to Use This Project](docs/HOW_TO_USE.md)** - Complete step-by-step guide ⭐ **START HERE**
-- **[Quick Start Guide](docs/QUICK_START.md)** - Get running in 15 minutes
-- **[Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)** - Track your deployment progress
-- [IAC_CODE.md](docs/IAC_CODE.md) - Complete IaC structure and conventions
-- [Architecture Document](docs/architecture.md) - Detailed architecture design
-- [Deployment Guide](docs/DEPLOYMENT.md) - Detailed deployment instructions
-
 ## Contributing
 
-1. Follow the conventions in [IAC_CODE.md](IAC_CODE.md)
+1. Follow the conventions in [Master Documentation](docs/MASTER.md)
 2. Always run `terraform fmt -recursive` before committing
 3. Test changes in staging environment first
 4. Update documentation for any structural changes
