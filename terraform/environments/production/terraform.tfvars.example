@@ -4,11 +4,19 @@
 cloudflare_api_token = "your-cloudflare-api-token-here"
 cloudflare_zone_id   = "your-zone-id-here"
 cloudflare_account_id = "your-account-id-here"
-domain               = "homelab.local"
 
-services = {
-  grafana = "10.0.1.105:3000"
-  traefik = "10.0.1.80:9000"
-  adguard = "10.0.1.53:3000"
-}
+# Domain configuration
+internal_domain = "home.internal"  # Internal DNS zone for LAN-only services
+public_domain   = "connect2home.online"  # Public domain for internet-facing services
+
+# Services that should be exposed publicly via Cloudflare Tunnel
+# These will be accessible at https://<service>.connect2home.online
+public_services = [
+  "grafana",
+  "home"  # Traefik dashboard
+]
+
+# Legacy services map (kept for backward compatibility if needed)
+# Note: DNS records are now managed via ExternalDNS in Kubernetes
+services = {}
 

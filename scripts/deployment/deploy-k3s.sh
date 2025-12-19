@@ -38,6 +38,12 @@ if kubectl get namespace cert-manager &> /dev/null; then
     kubectl apply -f kubernetes/base/cert-manager/
 fi
 
+# Deploy Cilium CNI (if not already installed)
+if ! kubectl get namespace cilium-system &> /dev/null; then
+    echo "Deploying Cilium CNI..."
+    ./scripts/deployment/deploy-cilium.sh || echo "Cilium deployment skipped (may need manual installation)"
+fi
+
 # Wait for deployments to be ready
 echo "Waiting for deployments to be ready..."
 kubectl wait --for=condition=available --timeout=300s deployment/adguard-home -n dns-system || true

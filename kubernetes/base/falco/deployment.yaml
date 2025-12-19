@@ -1,0 +1,23 @@
+# Falco Runtime Security
+# Note: Falco is typically installed via Helm chart
+# This is a placeholder - use Helm for production deployment
+#
+# Installation command:
+# helm repo add falcosecurity https://falcosecurity.github.io/charts
+# helm repo update
+# helm install falco falcosecurity/falco \
+#   --namespace falco \
+#   --set driver.enabled=true \
+#   --set falco.grpc.enabled=true \
+#   --set falco.grpcOutput.enabled=true
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-config
+  namespace: falco
+data:
+  falco.yaml: |
+    # Falco configuration
+    # This is a placeholder - actual config should come from Helm values
+

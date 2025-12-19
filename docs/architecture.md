@@ -29,6 +29,38 @@ Managed Switch (VLAN trunk)
         +-- Guest Wi-Fi
 ```
 
+## DNS and Domain Model
+
+### Dual-Domain Architecture
+
+The infrastructure uses a dual-domain model to separate internal (LAN-only) and public (internet-facing) services:
+
+#### Internal Domain: `home.internal`
+- Served by AdGuard Home DNS on LAN
+- Used for services accessible only from local network
+- Examples:
+  - `nas.home.internal` → 10.0.1.50
+  - `k3s.home.internal` → 10.0.1.100
+  - `portainer.home.internal` → 10.0.1.100 (via Traefik)
+  - `adguard.home.internal` → 10.0.1.53
+
+#### Public Domain: `connect2home.online`
+- Managed by Cloudflare DNS
+- Used for services exposed to the internet via Cloudflare Tunnel
+- Examples:
+  - `grafana.connect2home.online` → Monitoring dashboard
+  - `vault.connect2home.online` → Password manager
+  - `home.connect2home.online` → Traefik dashboard (with Zero Trust protection)
+
+### DNS Flow
+
+1. **Internal Queries**: Clients query AdGuard Home (10.0.1.53) for `*.home.internal` records
+2. **External Queries**: Clients query AdGuard Home, which forwards to upstream DNS (Cloudflare/Google) for public domains
+3. **Cloudflare Tunnel**: Routes `*.connect2home.online` traffic to Traefik ingress controller in k3s cluster
+4. **ExternalDNS**: Automatically creates DNS records in Cloudflare for Kubernetes Ingress resources with `*.connect2home.online` hostnames
+
+See [ADGUARD_DNS_SETUP.md](./ADGUARD_DNS_SETUP.md) for detailed AdGuard Home configuration.
+
 ## Components
 
 ### Network & Security
@@ -49,10 +81,10 @@ Managed Switch (VLAN trunk)
 
 ### Kubernetes Services
 
-- **AdGuard Home**: DNS blocking and filtering
+- **AdGuard Home**: DNS blocking and filtering, serves `home.internal` DNS records
 - **Traefik**: Ingress controller with TLS termination
 - **cert-manager**: Automated TLS certificate management
-- **Cloudflare Tunnel**: Secure external access without port forwarding
+- **Cloudflare Tunnel**: Secure external access without port forwarding for `connect2home.online`
 
 ### Monitoring & Observability
 

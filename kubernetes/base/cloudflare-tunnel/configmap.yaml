@@ -9,7 +9,15 @@ data:
     credentials-file: /etc/cloudflared/credentials.json
     
     ingress:
-      - hostname: homelab.local
-        service: http://traefik.ingress-traefik.svc.cluster.local:80
+      # Main entrypoint - Traefik dashboard (optional, behind Zero Trust recommended)
+      - hostname: home.connect2home.online
+        service: https://traefik.ingress-traefik.svc.cluster.local:443
+      # Individual public services - all route through Traefik
+      - hostname: grafana.connect2home.online
+        service: https://traefik.ingress-traefik.svc.cluster.local:443
+      # Add more public services here as needed
+      # - hostname: vault.connect2home.online
+      #   service: https://traefik.ingress-traefik.svc.cluster.local:443
+      # Catch-all 404
       - service: http_status:404
 

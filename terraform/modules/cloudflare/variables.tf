@@ -1,5 +1,5 @@
-variable "domain" {
-  description = "Primary domain name"
+variable "public_domain" {
+  description = "Public domain name for internet-facing services (e.g., connect2home.online)"
   type        = string
 }
 
@@ -29,7 +29,13 @@ variable "cloudflare_tunnel_secret" {
 }
 
 variable "services" {
-  description = "Map of service names to internal IP:port"
+  description = "Map of service names to internal IP:port (legacy)"
   type        = map(string)
+  default     = {}
+}
+
+variable "public_services" {
+  description = "List of service names that should be exposed publicly via Cloudflare"
+  type        = list(string)
 }
 

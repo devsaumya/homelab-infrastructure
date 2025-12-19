@@ -16,8 +16,10 @@
 - name: Install k3s server
   shell: |
     export K3S_TOKEN="{{ vault_k3s_token }}"
-    export INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --cluster-init"
+    export INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --cluster-init --flannel-backend=none"
     /tmp/install-k3s.sh
+  # Note: Flannel is disabled to allow Cilium CNI installation
+  # Cilium will be installed separately via Helm after k3s is running
   args:
     creates: /usr/local/bin/k3s
   register: k3s_install

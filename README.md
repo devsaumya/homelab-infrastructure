@@ -96,14 +96,19 @@ homelab-infrastructure/
 - Synology NAS: 10.0.1.50
 - AdGuard Home: 10.0.1.53 (via k3s)
 
+### Domains
+
+- **Internal**: `home.internal` - LAN-only services (e.g., `nas.home.internal`, `k3s.home.internal`)
+- **Public**: `connect2home.online` - Internet-facing services via Cloudflare Tunnel (e.g., `grafana.connect2home.online`)
+
 ## Services
 
 ### Kubernetes (k3s)
 
-- **AdGuard Home**: DNS blocking and filtering
+- **AdGuard Home**: DNS blocking and filtering, serves `home.internal` DNS records
 - **Traefik**: Reverse proxy and ingress controller
-- **cert-manager**: TLS certificate management
-- **Cloudflare Tunnel**: Secure external access
+- **cert-manager**: Automated TLS certificate management
+- **Cloudflare Tunnel**: Secure external access for `connect2home.online` services
 
 ### Docker (VM2)
 
@@ -131,6 +136,14 @@ homelab-infrastructure/
 ```bash
 ./scripts/maintenance/cleanup.sh
 ```
+
+## Documentation
+
+- [Architecture](./docs/architecture.md) - System architecture and design decisions
+- [Domain Model](./docs/DOMAIN_MODEL.md) - Dual-domain architecture (home.internal / connect2home.online)
+- [AdGuard DNS Setup](./docs/ADGUARD_DNS_SETUP.md) - Internal DNS configuration guide
+- [Deployment Guide](./docs/DEPLOYMENT.md) - Step-by-step deployment instructions
+- [How to Use](./docs/HOW_TO_USE.md) - Complete usage guide
 
 ## Security
 
