@@ -61,17 +61,27 @@ Quick reference for top-level directories:
    - Copy `infra/terraform/environments/production/terraform.tfvars.example` to `terraform.tfvars`
    - Fill in your Cloudflare credentials
 
-3. **Bootstrap VMs**:
+3. **Setup SSH keys** (if not already configured):
+   ```bash
+   ./scripts/setup/03-setup-ssh-keys.sh
+   ```
+   Or manually:
+   ```bash
+   ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.108
+   ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.109
+   ```
+
+4. **Bootstrap VMs**:
    ```bash
    ./scripts/setup/02-vm-bootstrap.sh
    ```
 
-4. **Install ArgoCD** (one-time manual step):
+5. **Install ArgoCD** (one-time manual step):
    ```bash
    kubectl apply -f k8s/bootstrap/argocd/install.yaml
    ```
 
-5. **Deploy root application** (ArgoCD will manage everything):
+6. **Deploy root application** (ArgoCD will manage everything):
    ```bash
    kubectl apply -f k8s/root-app.yaml
    ```
