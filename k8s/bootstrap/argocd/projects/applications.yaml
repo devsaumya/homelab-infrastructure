@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: applications
+  namespace: argocd
+spec:
+  description: Application workloads (AdGuard, Cloudflare Tunnel, etc.)
+
+  sourceRepos:
+    - https://github.com/devsaumya/homelab-infrastructure
+
+  destinations:
+    - namespace: "*"
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist: []

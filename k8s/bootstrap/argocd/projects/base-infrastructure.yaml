@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: base-infrastructure
+  namespace: argocd
+spec:
+  description: Core infrastructure services (cert-manager, ingress, networking)
+
+  sourceRepos:
+    - https://github.com/devsaumya/homelab-infrastructure
+
+  destinations:
+    - namespace: cert-manager
+      server: https://kubernetes.default.svc
+    - namespace: ingress-traefik
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: default
+      server: https://kubernetes.default.svc
+    - namespace: dns-system
+      server: https://kubernetes.default.svc
+    - namespace: monitoring
+      server: https://kubernetes.default.svc
+    - namespace: security
+      server: https://kubernetes.default.svc
+    - namespace: cilium-system
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: networking.k8s.io
+      kind: NetworkPolicy
+    - group: cert-manager.io
+      kind: ClusterIssuer

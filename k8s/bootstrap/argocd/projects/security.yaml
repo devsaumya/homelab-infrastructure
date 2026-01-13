@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: security
+  namespace: argocd
+spec:
+  description: Security services (Falco, Kyverno, Sealed Secrets)
+
+  sourceRepos:
+    - https://github.com/devsaumya/homelab-infrastructure
+    - https://github.com/falcosecurity/charts
+
+  destinations:
+    - namespace: falco
+      server: https://kubernetes.default.svc
+    - namespace: kyverno
+      server: https://kubernetes.default.svc
+    - namespace: sealed-secrets
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: kyverno.io
+      kind: "*"
+    - group: policy.kyverno.io
+      kind: "*"
