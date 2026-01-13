@@ -93,14 +93,14 @@ Tunnel → Traefik → Services
 Management VLAN (10.0.1.0/24):
 ├─ Gateway: 10.0.1.1 (ER605)
 ├─ Synology: 10.0.1.50
-├─ VM1 k3s-master: 10.0.1.100
-├─ VM2 security-ops: 10.0.1.105
+├─ VM1 k3s-master: 10.0.1.108
+├─ VM2 security-ops: 10.0.1.109
 ├─ AdGuard DNS: 10.0.1.53
 ├─ Traefik LB: 10.0.1.80
 └─ Orbi: 10.0.1.200
 
 Dynamic DHCP Pools:
-├─ VLAN 1: 10.0.1.100-200
+├─ VLAN 1: 10.0.1.108-200
 ├─ VLAN 2: 10.0.2.100-200
 ├─ VLAN 10: 10.0.10.100-200
 └─ VLAN 99: 10.0.99.100-200
@@ -224,7 +224,7 @@ Network Address: 10.0.1.0
 Netmask: 255.255.255.0
 Gateway: 10.0.1.1
 DHCP Enabled: Yes
-DHCP Start: 10.0.1.100
+DHCP Start: 10.0.1.108
 DHCP End: 10.0.1.200
 Lease Time: 86400 (24 hours)
 Primary DNS: 1.1.1.1
@@ -399,13 +399,13 @@ VLAN: 1
 Save
 
 Device: VM1 k3s-master
-IP: 10.0.1.100
+IP: 10.0.1.108
 MAC: [Add after VM creation]
 VLAN: 1
 Save
 
 Device: VM2 security-ops
-IP: 10.0.1.105
+IP: 10.0.1.109
 MAC: [Add after VM creation]
 VLAN: 1
 Save
@@ -1000,7 +1000,7 @@ Docker → Container
 Subdomain: grafana
 Domain: connect2home.online
 Protocol: HTTP
-URL: 10.0.1.105:3000
+URL: 10.0.1.109:3000
 Save
 ```
 
@@ -1009,7 +1009,7 @@ Save
 Subdomain: vault
 Domain: connect2home.online
 Protocol: HTTP
-URL: 10.0.1.105:8080
+URL: 10.0.1.109:8080
 Save
 ```
 
@@ -1018,7 +1018,7 @@ Save
 Subdomain: prometheus
 Domain: connect2home.online
 Protocol: HTTP
-URL: 10.0.1.105:9090
+URL: 10.0.1.109:9090
 Save
 ```
 
@@ -1052,7 +1052,7 @@ From external network (not home WiFi):
 3. Login with Cloudflare account
 4. Open browser: https://grafana.connect2home.online
 5. WARP intercepts → Cloudflare Zero Trust checks credentials
-6. If approved → Tunneled to 10.0.1.105:3000 (Grafana)
+6. If approved → Tunneled to 10.0.1.109:3000 (Grafana)
 
 **Option 2: Public Access (if Zero Trust not configured)**
 1. Browser: https://grafana.connect2home.online
@@ -1089,11 +1089,11 @@ Browser: http://10.0.1.53:3000
 
 ```
 nas.home.internal           → 10.0.1.50
-k3s.home.internal           → 10.0.1.100
-vault.home.internal         → 10.0.1.105
-portainer.home.internal     → 10.0.1.105
-grafana.home.internal       → 10.0.1.105
-prometheus.home.internal    → 10.0.1.105
+k3s.home.internal           → 10.0.1.108
+vault.home.internal         → 10.0.1.109
+portainer.home.internal     → 10.0.1.109
+grafana.home.internal       → 10.0.1.109
+prometheus.home.internal    → 10.0.1.109
 ```
 
 3. Save all records

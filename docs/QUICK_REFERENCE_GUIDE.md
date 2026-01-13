@@ -20,11 +20,11 @@ GATEWAY & CORE:
 └─ UPS Backup Power: Local only (no IP)
 
 SERVICES (VLAN 1 - Management):
-├─ VM1 k3s-master: 10.0.1.100
-├─ VM2 security-ops: 10.0.1.105
+├─ VM1 k3s-master: 10.0.1.108
+├─ VM2 security-ops: 10.0.1.109
 ├─ AdGuard DNS: 10.0.1.53 (port 3000)
 ├─ Traefik LoadBalancer: 10.0.1.80 (port 9000)
-└─ Prometheus: 10.0.1.105 (port 9090)
+└─ Prometheus: 10.0.1.109 (port 9090)
 
 EXTERNAL ACCESS:
 ├─ Cloudflare: https://one.dash.cloudflare.com
@@ -74,7 +74,7 @@ VLAN 1 (Management):
 ☐ ID: 1
 ☐ Network: 10.0.1.0/24
 ☐ Gateway: 10.0.1.1
-☐ DHCP: 10.0.1.100-200 (86400s lease)
+☐ DHCP: 10.0.1.108-200 (86400s lease)
 ☐ DNS: 1.1.1.1, 8.8.8.8
 
 VLAN 2 (Trusted):
@@ -122,8 +122,8 @@ VLAN 99 (Guest):
 
 ```
 ☐ Synology: 10.0.1.50 (MAC from device label)
-☐ VM1: 10.0.1.100 (MAC after creation)
-☐ VM2: 10.0.1.105 (MAC after creation)
+☐ VM1: 10.0.1.108 (MAC after creation)
+☐ VM2: 10.0.1.109 (MAC after creation)
 ☐ Orbi: 10.0.1.200 (MAC from Orbi status page)
 ☐ AdGuard: 10.0.1.53 (MAC after k3s deployment)
 ☐ Traefik: 10.0.1.80 (MAC after k3s deployment)
@@ -377,9 +377,9 @@ Time Zone:
 
 ```
 In Cloudflare Tunnel UI:
-☐ Hostname 1: grafana.connect2home.online → 10.0.1.105:3000
-☐ Hostname 2: vault.connect2home.online → 10.0.1.105:8080
-☐ Hostname 3: prometheus.connect2home.online → 10.0.1.105:9090
+☐ Hostname 1: grafana.connect2home.online → 10.0.1.109:3000
+☐ Hostname 2: vault.connect2home.online → 10.0.1.109:8080
+☐ Hostname 3: prometheus.connect2home.online → 10.0.1.109:9090
 ☐ Hostname 4: home.connect2home.online → 10.0.1.80:9000
 ☐ Hostname 5: nas.connect2home.online → 10.0.1.50:5000
 ☐ All routes saved
@@ -415,8 +415,8 @@ nslookup nas.home.internal       # LAN DNS (after AdGuard)
 arp-scan -l                      # Find all IPs on subnet
 
 # SSH access
-ssh admin@10.0.1.100             # VM1
-ssh admin@10.0.1.105             # VM2
+ssh admin@10.0.1.108             # VM1
+ssh admin@10.0.1.109             # VM2
 ssh admin@10.0.1.50              # Synology (if SSH enabled)
 ```
 
@@ -446,11 +446,11 @@ ssh-keygen -t ed25519 -C "homelab-admin" \
   -f ~/.ssh/homelab_ed25519
 
 # Copy key to VMs
-ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.100
-ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.105
+ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.108
+ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.109
 
 # Use key for login
-ssh -i ~/.ssh/homelab_ed25519 admin@10.0.1.100
+ssh -i ~/.ssh/homelab_ed25519 admin@10.0.1.108
 ```
 
 ### Docker on Synology
@@ -483,7 +483,7 @@ ping 10.0.2.1              # Cross-VLAN to Trusted
 ping 10.0.10.1             # Cross-VLAN to IoT
 ping 8.8.8.8               # Internet
 nslookup google.com        # Public DNS
-ssh admin@10.0.1.100       # VM1 SSH
+ssh admin@10.0.1.108       # VM1 SSH
 http://10.0.1.50:5000      # Synology DSM
 ```
 
@@ -498,7 +498,7 @@ nslookup google.com        # Public DNS
 # These should FAIL ✗ (blocked by firewall)
 ping 10.0.1.1              # Management gateway - BLOCK
 ping 10.0.1.50             # Synology - BLOCK
-ssh admin@10.0.1.100       # VM1 SSH - BLOCK
+ssh admin@10.0.1.108       # VM1 SSH - BLOCK
 ```
 
 ### From IoT VLAN (10.0.10.x)

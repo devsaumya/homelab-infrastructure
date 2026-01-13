@@ -24,8 +24,8 @@ Complete guide for setting up and configuring all hardware components in the hom
 | **Router** | TP-Link ER605 | Edge router, VLAN management, firewall | 10.0.1.1 |
 | **NAS** | Synology (varies) | Centralized storage, NFS/SMB shares | 10.0.1.50 |
 | **VM Host** | Varies (Proxmox/ESXi/etc) | Virtualization host | - |
-| **k3s-master** | 2 CPU, 4GB RAM, 40GB disk | Kubernetes control plane | 10.0.1.100 |
-| **security-ops** | 2 CPU, 4GB RAM, 40GB disk | Docker services, monitoring | 10.0.1.105 |
+| **k3s-master** | 2 CPU, 4GB RAM, 40GB disk | Kubernetes control plane | 10.0.1.108 |
+| **security-ops** | 2 CPU, 4GB RAM, 40GB disk | Docker services, monitoring | 10.0.1.109 |
 | **Managed Switch** | VLAN-capable | Network switching, VLAN trunking | - |
 
 ### Optional Hardware
@@ -65,7 +65,7 @@ The TP-Link ER605 serves as the edge router, firewall, and VLAN gateway for the 
 1. Navigate to **Network → LAN**
 2. Set management IP: `10.0.1.1`
 3. Subnet mask: `255.255.255.0`
-4. DHCP range: `10.0.1.100 - 10.0.1.200` (for VLAN 1)
+4. DHCP range: `10.0.1.108 - 10.0.1.200` (for VLAN 1)
 
 ### VLAN Configuration
 
@@ -75,7 +75,7 @@ Navigate to **Network → VLAN** and create the following VLANs:
 
 | VLAN ID | Name | IP Range | DHCP Range | Gateway |
 |---------|------|----------|------------|---------|
-| 1 | Management | 10.0.1.0/24 | 10.0.1.100-10.0.1.200 | 10.0.1.1 |
+| 1 | Management | 10.0.1.0/24 | 10.0.1.108-10.0.1.200 | 10.0.1.1 |
 | 2 | Trusted LAN | 10.0.2.0/24 | 10.0.2.100-10.0.2.200 | 10.0.2.1 |
 | 10 | IoT | 10.0.10.0/24 | 10.0.10.100-10.0.10.200 | 10.0.10.1 |
 | 20 | DMZ | 10.0.20.0/24 | 10.0.20.100-10.0.20.200 | 10.0.20.1 |
@@ -130,7 +130,7 @@ Navigate to **Security → Firewall → ACL Rules**:
 
 5. **DMZ → Management**: Allow k3s API (6443)
    - Source: 10.0.20.0/24
-   - Destination: 10.0.1.100
+   - Destination: 10.0.1.108
    - Service: TCP 6443
    - Action: Allow
 
@@ -302,7 +302,7 @@ Navigate to **Control Panel → Shared Folder** and create:
 - **Disk**: 40GB (SSD recommended)
 - **Network**: 
   - VLAN 1 (Management)
-  - Static IP: 10.0.1.100
+  - Static IP: 10.0.1.108
 
 #### Installation Steps
 
@@ -321,7 +321,7 @@ Navigate to **Control Panel → Shared Folder** and create:
      ethernets:
        eth0:
          addresses:
-           - 10.0.1.100/24
+           - 10.0.1.108/24
          gateway4: 10.0.1.1
          nameservers:
            addresses:
@@ -349,13 +349,13 @@ Navigate to **Control Panel → Shared Folder** and create:
 - **Disk**: 40GB (SSD recommended)
 - **Network**: 
   - VLAN 1 (Management)
-  - Static IP: 10.0.1.105
+  - Static IP: 10.0.1.109
 
 #### Installation Steps
 
 1. **Create VM** in virtualization platform
 2. **Install Ubuntu 22.04 LTS** (same as k3s-master)
-3. **Configure Network** (same as k3s-master, use IP 10.0.1.105)
+3. **Configure Network** (same as k3s-master, use IP 10.0.1.109)
 4. **Verify connectivity**
 
 ---
@@ -424,16 +424,16 @@ If using VLAN-capable access points:
 ### Testing Network Connectivity
 
 ```bash
-# From k3s-master (10.0.1.100)
+# From k3s-master (10.0.1.108)
 ping 10.0.1.1      # Gateway
 ping 10.0.1.50     # Synology NAS
-ping 10.0.1.105    # security-ops VM
+ping 10.0.1.109    # security-ops VM
 ping 8.8.8.8       # Internet
 
-# From security-ops (10.0.1.105)
+# From security-ops (10.0.1.109)
 ping 10.0.1.1      # Gateway
 ping 10.0.1.50     # Synology NAS
-ping 10.0.1.100    # k3s-master
+ping 10.0.1.108    # k3s-master
 ping 8.8.8.8       # Internet
 ```
 

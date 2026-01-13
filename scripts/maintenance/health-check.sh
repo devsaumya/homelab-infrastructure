@@ -33,7 +33,7 @@ echo ""
 
 # Check network connectivity
 echo "Checking network connectivity..."
-HOSTS=("10.0.1.100" "10.0.1.105" "10.0.1.50")
+HOSTS=("10.0.1.108" "10.0.1.109" "10.0.1.50")
 for host in "${HOSTS[@]}"; do
     if ping -c 1 -W 2 "$host" &> /dev/null; then
         echo "✓ $host is reachable"

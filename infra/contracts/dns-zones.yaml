@@ -7,10 +7,10 @@ zones:
         value: 10.0.1.50
       - name: k3s-master
         type: A
-        value: 10.0.1.100
+        value: 10.0.1.108
       - name: security-ops
         type: A
-        value: 10.0.1.105
+        value: 10.0.1.109
       - name: orbi-ap
         type: A
         value: 10.0.1.200

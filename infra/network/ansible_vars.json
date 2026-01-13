@@ -62,13 +62,13 @@
     },
     "k3s_master": {
       "hostname": "k3s-master.home.internal",
-      "ip": "10.0.1.100",
+      "ip": "10.0.1.108",
       "vlan": "vlan1_management",
       "mac": "TBD"
     },
     "security_ops": {
       "hostname": "security-ops.home.internal",
-      "ip": "10.0.1.105",
+      "ip": "10.0.1.109",
       "vlan": "vlan1_management",
       "mac": "TBD"
     },

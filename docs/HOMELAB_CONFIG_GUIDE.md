@@ -57,8 +57,8 @@ Cloudflare (connect2home.online) → Tunnel → Traefik LB → Services
 ### Static IP Reservations
 
 - Synology DS720+: 10.0.1.50 (VLAN 1)
-- VM1 k3s-master: 10.0.1.100 (VLAN 1)
-- VM2 security-ops: 10.0.1.105 (VLAN 1)
+- VM1 k3s-master: 10.0.1.108 (VLAN 1)
+- VM2 security-ops: 10.0.1.109 (VLAN 1)
 - AdGuard DNS: 10.0.1.53 (VLAN 1)
 - Traefik LB: 10.0.1.80 (VLAN 1)
 - Orbi RBR350: 10.0.1.200 (VLAN 1)
@@ -67,13 +67,13 @@ Cloudflare (connect2home.online) → Tunnel → Traefik LB → Services
 
 **Internal (LAN-Only via AdGuard Home):**
 - nas.home.internal → 10.0.1.50
-- k3s.home.internal → 10.0.1.100
-- vault.home.internal → 10.0.1.105
-- portainer.home.internal → 10.0.1.105
+- k3s.home.internal → 10.0.1.108
+- vault.home.internal → 10.0.1.109
+- portainer.home.internal → 10.0.1.109
 
 **External (Internet-Facing via Cloudflare):**
-- vault.connect2home.online → Tunnel → 10.0.1.105:8080
-- grafana.connect2home.online → Tunnel → 10.0.1.105:3000
+- vault.connect2home.online → Tunnel → 10.0.1.109:8080
+- grafana.connect2home.online → Tunnel → 10.0.1.109:3000
 - home.connect2home.online → Tunnel → 10.0.1.80:9000
 
 ---
@@ -108,7 +108,7 @@ Navigate to: Settings → Wired Networks → LAN
 
 **VLAN 1 (Management):**
 - ID: 1, Network: 10.0.1.0/24, Gateway: 10.0.1.1
-- DHCP: 10.0.1.100-200, Lease: 86400s (24h)
+- DHCP: 10.0.1.108-200, Lease: 86400s (24h)
 - DNS: 1.1.1.1, 8.8.8.8
 
 **VLAN 2 (Trusted):**
@@ -141,8 +141,8 @@ Settings → Wired Networks → LAN → DHCP Server → Reservations
 
 Add entries as devices are created:
 - Synology: 10.0.1.50 (MAC from label)
-- VM1: 10.0.1.100 (MAC after creation)
-- VM2: 10.0.1.105 (MAC after creation)
+- VM1: 10.0.1.108 (MAC after creation)
+- VM2: 10.0.1.109 (MAC after creation)
 - Others: Add MACs as needed
 
 ### Step 6: Configure Firewall Rules
@@ -350,7 +350,7 @@ All 3 should appear in Shared Folders list.
 
 SSH into VM2 (after VM creation):
 ```bash
-ssh admin@10.0.1.105
+ssh admin@10.0.1.109
 
 mkdir -p /data/cloudflare
 
@@ -369,9 +369,9 @@ Wait 1-2 minutes for tunnel to show "Connected" in Cloudflare.
 
 In Cloudflare Tunnel UI, add Public Hostnames:
 
-1. **grafana.connect2home.online** → http://10.0.1.105:3000
-2. **vault.connect2home.online** → http://10.0.1.105:8080
-3. **prometheus.connect2home.online** → http://10.0.1.105:9090
+1. **grafana.connect2home.online** → http://10.0.1.109:3000
+2. **vault.connect2home.online** → http://10.0.1.109:8080
+3. **prometheus.connect2home.online** → http://10.0.1.109:9090
 4. **home.connect2home.online** → http://10.0.1.80:9000
 
 ### Step 4: Enable Zero Trust Access
@@ -408,9 +408,9 @@ After deploying AdGuard Home in k3s:
 2. Settings → DNS Settings → Local DNS
 3. Add records:
    - nas.home.internal → 10.0.1.50
-   - k3s.home.internal → 10.0.1.100
-   - vault.home.internal → 10.0.1.105
-   - portainer.home.internal → 10.0.1.105
+   - k3s.home.internal → 10.0.1.108
+   - vault.home.internal → 10.0.1.109
+   - portainer.home.internal → 10.0.1.109
 
 ### Update ER605 DNS
 
@@ -512,8 +512,8 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 - ER605: 10.0.1.1
 - Synology: 10.0.1.50
 - Orbi: 10.0.1.200
-- VM1: 10.0.1.100
-- VM2: 10.0.1.105
+- VM1: 10.0.1.108
+- VM2: 10.0.1.109
 
 **Critical Ports:**
 - HTTP: 80
@@ -527,7 +527,7 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 ping 10.0.1.1                 # Network working
 nslookup google.com           # DNS working
 curl https://grafana.connect2home.online  # External access
-ssh admin@10.0.1.100          # VM access
+ssh admin@10.0.1.108          # VM access
 ```
 
 ---

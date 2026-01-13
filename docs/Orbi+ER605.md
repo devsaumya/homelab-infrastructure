@@ -19,7 +19,7 @@ Goal:
    - Ensure ER605 firmware is current.  
    - Keep WAN config as-is (working internet).  
    - Under **Network → LAN / VLAN**, recreate VLANs exactly:  
-     - VLAN 1 (Management): 10.0.1.0/24, gateway 10.0.1.1, DHCP 10.0.1.100–200.  
+     - VLAN 1 (Management): 10.0.1.0/24, gateway 10.0.1.1, DHCP 10.0.1.108–200.  
      - VLAN 2 (Trusted): 10.0.2.0/24, gateway 10.0.2.1, DHCP 10.0.2.100–200.  
      - VLAN 10 (IoT): 10.0.10.0/24, gateway 10.0.10.1, DHCP 10.0.10.100–200.  
      - VLAN 99 (Guest): 10.0.99.0/24, gateway 10.0.99.1, DHCP 10.0.99.100–200. [file:121][file:122]
@@ -47,8 +47,8 @@ Goal:
 3. **DHCP reservations (optional but recommended)**  
    - Reserve IPs in VLAN1:  
      - Synology: 10.0.1.50  
-     - k3s VM: 10.0.1.100  
-     - security‑ops VM: 10.0.1.105  
+     - k3s VM: 10.0.1.108  
+     - security‑ops VM: 10.0.1.109  
      - **Orbi: 10.0.1.200** (use Orbi MAC from status page). [file:121][file:122]
 
 4. **Checkpoint – ER605**  

@@ -157,9 +157,9 @@ I've created a **professional-grade, production-ready homelab setup guide** spec
 ✅ Tunnel creation (homelab-prod)
 ✅ Docker container deployment on Synology
 ✅ 5 public hostname routes configured:
-  - grafana.connect2home.online → 10.0.1.105:3000
-  - vault.connect2home.online → 10.0.1.105:8080
-  - prometheus.connect2home.online → 10.0.1.105:9090
+  - grafana.connect2home.online → 10.0.1.109:3000
+  - vault.connect2home.online → 10.0.1.109:8080
+  - prometheus.connect2home.online → 10.0.1.109:9090
   - home.connect2home.online → 10.0.1.80:9000
   - nas.connect2home.online → 10.0.1.50:5000
 ✅ Zero Trust access policies

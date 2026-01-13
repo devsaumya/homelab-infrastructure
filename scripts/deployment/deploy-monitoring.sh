@@ -23,6 +23,6 @@ ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
   --become
 
 echo "=== Monitoring stack deployment complete ==="
-echo "Access Grafana at: http://10.0.1.105:3000"
-echo "Access Prometheus at: http://10.0.1.105:9090"
+echo "Access Grafana at: http://10.0.1.109:3000"
+echo "Access Prometheus at: http://10.0.1.109:9090"
 

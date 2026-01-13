@@ -48,7 +48,7 @@ TP-Link ER605 (WAN/Firewall edge)
 Managed Switch (VLAN trunk)
     |
     +-- VLAN 1 (Management) - 10.0.1.0/24
-    |   +-- k3s-master (10.0.1.100)
+    |   +-- k3s-master (10.0.1.108)
     |   +-- Synology NAS (10.0.1.50)
     |   +-- AdGuard Home (10.0.1.53)
     |
@@ -123,11 +123,11 @@ See [HARDWARE_SETUP.md](./HARDWARE_SETUP.md) for detailed hardware configuration
 
 ### Key IPs
 
-- k3s-master: 10.0.1.100
-- security-ops (VM2): 10.0.1.105
+- k3s-master: 10.0.1.108
+- security-ops (VM2): 10.0.1.109
 - Synology NAS: 10.0.1.50
 - AdGuard Home: 10.0.1.53 (via k3s)
-- Traefik: 10.0.1.100 (via k3s)
+- Traefik: 10.0.1.108 (via k3s)
 
 ### Firewall Rules
 
@@ -158,8 +158,8 @@ The infrastructure uses a dual-domain model to separate internal (LAN-only) and 
 - Used for services accessible only from local network
 - Examples:
   - `nas.home.internal` → 10.0.1.50
-  - `k3s.home.internal` → 10.0.1.100
-  - `portainer.home.internal` → 10.0.1.100 (via Traefik)
+  - `k3s.home.internal` → 10.0.1.108
+  - `portainer.home.internal` → 10.0.1.108 (via Traefik)
   - `adguard.home.internal` → 10.0.1.53
 
 #### Public Domain: `connect2home.online`
@@ -186,9 +186,9 @@ The infrastructure uses a dual-domain model to separate internal (LAN-only) and 
    - Add A records:
      ```
      nas.home.internal          → 10.0.1.50
-     k3s.home.internal          → 10.0.1.100
+     k3s.home.internal          → 10.0.1.108
      adguard.home.internal      → 10.0.1.53
-     traefik.home.internal      → 10.0.1.100
+     traefik.home.internal      → 10.0.1.108
      ```
 4. Configure upstream DNS servers: `1.1.1.1`, `8.8.8.8`
 
@@ -238,11 +238,11 @@ Edit `infra/ansible/inventory/hosts.yml`:
 
 ```yaml
 k3s-master:
-  ansible_host: 10.0.1.100  # Your k3s master IP
+  ansible_host: 10.0.1.108  # Your k3s master IP
   ansible_user: admin
 
 security-ops:
-  ansible_host: 10.0.1.105  # Your VM2 IP
+  ansible_host: 10.0.1.109  # Your VM2 IP
   ansible_user: admin
 ```
 
@@ -349,7 +349,7 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Verify installation
-ssh admin@10.0.1.100
+ssh admin@10.0.1.108
 sudo systemctl status k3s
 
 # Get kubeconfig
@@ -361,7 +361,7 @@ Configure kubectl locally:
 ```bash
 mkdir -p ~/.kube
 # Copy kubeconfig content to ~/.kube/config
-# Update server URL from 127.0.0.1 to 10.0.1.100:6443
+# Update server URL from 127.0.0.1 to 10.0.1.108:6443
 
 # Test connection
 kubectl get nodes
@@ -414,15 +414,15 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Deploy Docker Compose stack (on VM2)
-ssh admin@10.0.1.105
+ssh admin@10.0.1.109
 cd /opt/docker/monitoring
 docker compose up -d
 ```
 
 Access services:
-- Grafana: http://10.0.1.105:3000 (default: admin/admin)
-- Prometheus: http://10.0.1.105:9090
-- Loki: http://10.0.1.105:3100
+- Grafana: http://10.0.1.109:3000 (default: admin/admin)
+- Prometheus: http://10.0.1.109:9090
+- Loki: http://10.0.1.109:3100
 
 ### Phase 6: Configure Cloudflare
 
@@ -447,7 +447,7 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Deploy Trivy (on VM2)
-ssh admin@10.0.1.105
+ssh admin@10.0.1.109
 cd /opt/docker/security
 docker compose up -d
 ```
@@ -480,22 +480,22 @@ docker compose up -d
 
 #### Prometheus
 - **Purpose**: Metrics collection
-- **Access**: http://10.0.1.105:9090
+- **Access**: http://10.0.1.109:9090
 
 #### Grafana
 - **Purpose**: Dashboards and visualization
-- **Access**: http://10.0.1.105:3000 (internal) or https://grafana.connect2home.online (public)
+- **Access**: http://10.0.1.109:3000 (internal) or https://grafana.connect2home.online (public)
 
 #### Loki
 - **Purpose**: Log aggregation
-- **Access**: http://10.0.1.105:3100
+- **Access**: http://10.0.1.109:3100
 
 #### AlertManager
 - **Purpose**: Alert routing and notification
 
 #### Trivy
 - **Purpose**: Container image scanning
-- **Access**: http://10.0.1.105:4954
+- **Access**: http://10.0.1.109:4954
 
 #### Portainer
 - **Purpose**: Docker management
@@ -609,7 +609,7 @@ docker ps  # On VM2
 kubectl apply -k kubernetes/base/
 
 # Update Docker Compose services (on VM2)
-ssh admin@10.0.1.105
+ssh admin@10.0.1.109
 cd /opt/docker/monitoring
 docker compose pull
 docker compose up -d
@@ -625,7 +625,7 @@ docker compose up -d
 kubectl delete -f kubernetes/base/
 
 # Stop Docker services (on VM2)
-ssh admin@10.0.1.105
+ssh admin@10.0.1.109
 docker compose down
 ```
 
@@ -667,7 +667,7 @@ docker compose down
 
 ```bash
 # Check k3s logs
-ssh admin@10.0.1.100
+ssh admin@10.0.1.108
 sudo journalctl -u k3s -f
 
 # Restart k3s
@@ -809,17 +809,17 @@ homelab-infrastructure/
 
 #### Internal Services (home.internal - LAN only)
 - **AdGuard Home**: https://adguard.home.internal:3000 or http://10.0.1.53:3000
-- **Traefik Dashboard**: https://traefik.home.internal or http://10.0.1.100:9000
+- **Traefik Dashboard**: https://traefik.home.internal or http://10.0.1.108:9000
 - **NAS**: https://nas.home.internal
 
 #### Public Services (connect2home.online - Internet accessible)
 - **Grafana**: https://grafana.connect2home.online
 - **Traefik Dashboard**: https://home.connect2home.online
-- **Prometheus**: http://10.0.1.105:9090 (internal access only)
+- **Prometheus**: http://10.0.1.109:9090 (internal access only)
 
 #### Direct IP Access (during setup)
-- **Grafana**: http://10.0.1.105:3000
-- **Prometheus**: http://10.0.1.105:9090
+- **Grafana**: http://10.0.1.109:3000
+- **Prometheus**: http://10.0.1.109:9090
 - **AdGuard Home**: http://10.0.1.53:3000
 
 ### Important Files

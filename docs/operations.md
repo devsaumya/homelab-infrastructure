@@ -132,9 +132,9 @@ Edit `infra/contracts/dns-zones.yaml` and regenerate configs.
 
 ### Access Monitoring Services
 
-- **Grafana**: http://10.0.1.105:3000 (VM2)
-- **Prometheus**: http://10.0.1.105:9090 (VM2)
-- **Loki**: http://10.0.1.105:3100 (VM2)
+- **Grafana**: http://10.0.1.109:3000 (VM2)
+- **Prometheus**: http://10.0.1.109:9090 (VM2)
+- **Loki**: http://10.0.1.109:3100 (VM2)
 
 ### ArgoCD UI
 
@@ -177,8 +177,8 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server -f
 
 Test connectivity:
 ```bash
-ping 10.0.1.100  # k3s-master
-ping 10.0.1.105  # VM2
+ping 10.0.1.108  # k3s-master
+ping 10.0.1.109  # VM2
 ping 10.0.1.50   # Synology NAS
 ```
 

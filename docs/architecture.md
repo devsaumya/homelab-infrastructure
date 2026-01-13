@@ -60,8 +60,8 @@ Everything that ArgoCD deploys (GitOps-managed):
 
 ### Key Components
 
-- **k3s-master**: 10.0.1.100
-- **security-ops (VM2)**: 10.0.1.105
+- **k3s-master**: 10.0.1.108
+- **security-ops (VM2)**: 10.0.1.109
 - **Synology NAS**: 10.0.1.50
 - **AdGuard Home**: 10.0.1.53 (via k3s)
 
