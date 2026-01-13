@@ -8,7 +8,7 @@ on:
       - '.github/workflows/validate-contracts.yml'
   push:
     branches:
-      - main
+      - master
     paths:
       - 'infra/contracts/**'
 

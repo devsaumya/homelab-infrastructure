@@ -9,7 +9,7 @@ spec:
   project: security
   source:
     repoURL: https://github.com/devsaumya/homelab-infrastructure
-    targetRevision: main
+    targetRevision: master
     path: k8s/security
   destination:
     server: https://kubernetes.default.svc

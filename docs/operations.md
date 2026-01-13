@@ -45,7 +45,7 @@ ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
 **Update Kubernetes apps:**
 ArgoCD will automatically sync changes when you push to the repository. To force sync:
 ```bash
-kubectl patch app <app-name> -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"main"}}}'
+kubectl patch app <app-name> -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"master"}}}'
 ```
 
 Or use the ArgoCD UI to trigger a sync.
@@ -75,7 +75,7 @@ argocd app sync <app-name>
 
 Or via kubectl:
 ```bash
-kubectl patch application <app-name> -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"main"}}}'
+kubectl patch application <app-name> -n argocd --type merge -p '{"operation":{"initiatedBy":{"username":"admin"},"sync":{"revision":"master"}}}'
 ```
 
 ### Rollback
