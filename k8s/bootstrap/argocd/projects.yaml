@@ -1,6 +1,7 @@
 ---
-# ArgoCD Project for Base Infrastructure
-# Manages core infrastructure services: cert-manager, traefik, networking
+# =========================================================
+# ArgoCD Project: Base Infrastructure
+# =========================================================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -8,32 +9,36 @@ metadata:
   namespace: argocd
 spec:
   description: Core infrastructure services (cert-manager, ingress, networking)
+
   sourceRepos:
-    - 'https://github.com/devsaumya/homelab-infrastructure'
+    - https://github.com/devsaumya/homelab-infrastructure
+
   destinations:
-    - namespace: 'cert-manager'
+    - namespace: cert-manager
       server: https://kubernetes.default.svc
-    - namespace: 'ingress-traefik'
+    - namespace: ingress-traefik
       server: https://kubernetes.default.svc
-    - namespace: 'kube-system'
+    - namespace: kube-system
       server: https://kubernetes.default.svc
-    - namespace: 'default'
+    - namespace: default
       server: https://kubernetes.default.svc
-    - namespace: 'dns-system'
+    - namespace: dns-system
       server: https://kubernetes.default.svc
-    - namespace: 'monitoring'
+    - namespace: monitoring
       server: https://kubernetes.default.svc
-    - namespace: 'security'
+    - namespace: security
       server: https://kubernetes.default.svc
-    - namespace: 'cilium-system'
+    - namespace: cilium-system
       server: https://kubernetes.default.svc
+
   clusterResourceWhitelist:
-    - group: ''
+    - group: ""
       kind: Namespace
-    - group: 'networking.k8s.io'
+    - group: networking.k8s.io
       kind: NetworkPolicy
-    - group: 'cert-manager.io'
+    - group: cert-manager.io
       kind: ClusterIssuer
+
   roles:
     - name: admin
       policies:
@@ -43,8 +48,9 @@ spec:
         - homelab-admins
 
 ---
-# ArgoCD Project for Security Services
-# Manages security tools: Falco, Kyverno, Sealed Secrets
+# =========================================================
+# ArgoCD Project: Security
+# =========================================================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -52,23 +58,27 @@ metadata:
   namespace: argocd
 spec:
   description: Security services (Falco, Kyverno, Sealed Secrets)
+
   sourceRepos:
-    - 'https://github.com/devsaumya/homelab-infrastructure'
-    - 'https://github.com/falcosecurity/charts'
+    - https://github.com/devsaumya/homelab-infrastructure
+    - https://github.com/falcosecurity/charts
+
   destinations:
-    - namespace: 'falco'
+    - namespace: falco
       server: https://kubernetes.default.svc
-    - namespace: 'kyverno'
+    - namespace: kyverno
       server: https://kubernetes.default.svc
-    - namespace: 'sealed-secrets'
+    - namespace: sealed-secrets
       server: https://kubernetes.default.svc
+
   clusterResourceWhitelist:
-    - group: ''
+    - group: ""
       kind: Namespace
-    - group: 'kyverno.io'
-      kind: '*'
-    - group: 'policy.kyverno.io'
-      kind: '*'
+    - group: kyverno.io
+      kind: "*"
+    - group: policy.kyverno.io
+      kind: "*"
+
   roles:
     - name: admin
       policies:
@@ -79,8 +89,9 @@ spec:
         - security-team
 
 ---
-# ArgoCD Project for Applications
-# Manages application workloads
+# =========================================================
+# ArgoCD Project: Applications
+# =========================================================
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -88,12 +99,16 @@ metadata:
   namespace: argocd
 spec:
   description: Application workloads (AdGuard, Cloudflare Tunnel, etc.)
+
   sourceRepos:
-    - 'https://github.com/devsaumya/homelab-infrastructure'
+    - https://github.com/devsaumya/homelab-infrastructure
+
   destinations:
-    - namespace: '*'
+    - namespace: "*"
       server: https://kubernetes.default.svc
-  clusterResourceWhitelist: []  # No cluster resources for apps
+
+  clusterResourceWhitelist: []
+
   roles:
     - name: admin
       policies:
@@ -102,4 +117,3 @@ spec:
       groups:
         - homelab-admins
         - developers
-
