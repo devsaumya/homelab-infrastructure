@@ -16,7 +16,7 @@
     - name: Remove k3s
       shell: |
         /usr/local/bin/k3s-uninstall.sh
-      when: "'k3s_cluster' in group_names"
+      when: "'k3s' in group_names"
       ignore_errors: true
     
     - name: Stop Docker containers
@@ -27,6 +27,6 @@
         - /opt/docker/monitoring
         - /opt/docker/security
         - /opt/docker/services
-      when: "'monitoring' in group_names"
+      when: "'security-ops' in inventory_hostname or 'security-ops' in group_names"
       ignore_errors: true
 

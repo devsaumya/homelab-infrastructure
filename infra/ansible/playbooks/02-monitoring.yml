@@ -1,7 +1,7 @@
 ---
 # Monitoring stack deployment on VM2
 - name: Deploy monitoring stack
-  hosts: monitoring
+  hosts: security-ops
   become: true
   roles:
     - common

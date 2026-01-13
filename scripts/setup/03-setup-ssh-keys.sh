@@ -45,8 +45,8 @@ echo ""
 
 # VMs to configure
 VMS=(
-    "admin@10.0.1.108:k3s-master"
-    "admin@10.0.1.109:security-ops"
+    "homelab@10.0.1.108:k3s-master"
+    "homelab@10.0.1.109:security-ops"
 )
 
 echo "Copying SSH key to VMs..."

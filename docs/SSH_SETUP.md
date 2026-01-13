@@ -29,10 +29,10 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_rsa -N "" -C "ansible@homelab"
 
 ```bash
 # Copy to k3s-master
-ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.108
+ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.108
 
 # Copy to security-ops
-ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.109
+ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.109
 ```
 
 You'll be prompted for the password on each VM during this step.
@@ -41,10 +41,10 @@ You'll be prompted for the password on each VM during this step.
 
 ```bash
 # Test k3s-master
-ssh admin@10.0.1.108 "echo 'Connection successful'"
+ssh homelab@10.0.1.108 "echo 'Connection successful'"
 
 # Test security-ops
-ssh admin@10.0.1.109 "echo 'Connection successful'"
+ssh homelab@10.0.1.109 "echo 'Connection successful'"
 ```
 
 Both should work without password prompts.
@@ -93,13 +93,13 @@ If you see `Permission denied (publickey,password)`:
 
 3. **Verify key is on remote host:**
    ```bash
-   ssh admin@10.0.1.108 "cat ~/.ssh/authorized_keys"
+   ssh homelab@10.0.1.108 "cat ~/.ssh/authorized_keys"
    ```
    Should show your public key.
 
 4. **Check remote permissions:**
    ```bash
-   ssh admin@10.0.1.108 "ls -la ~/.ssh/"
+   ssh homelab@10.0.1.108 "ls -la ~/.ssh/"
    ```
    Should show:
    - `~/.ssh` directory: `drwx------` (700)

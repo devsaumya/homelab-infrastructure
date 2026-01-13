@@ -350,7 +350,7 @@ All 3 should appear in Shared Folders list.
 
 SSH into VM2 (after VM creation):
 ```bash
-ssh admin@10.0.1.109
+ssh homelab@10.0.1.109
 
 mkdir -p /data/cloudflare
 
@@ -527,7 +527,7 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 ping 10.0.1.1                 # Network working
 nslookup google.com           # DNS working
 curl https://grafana.connect2home.online  # External access
-ssh admin@10.0.1.108          # VM access
+ssh homelab@10.0.1.108          # VM access
 ```
 
 ---

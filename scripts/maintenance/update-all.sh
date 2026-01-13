@@ -19,15 +19,15 @@ ansible-playbook \
 
 # Update Docker images
 echo "Updating Docker images on monitoring host..."
-ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/monitoring && docker compose pull && docker compose up -d" \
   --become
 
-ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/security && docker compose pull && docker compose up -d" \
   --become
 
-ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/services && docker compose pull && docker compose up -d" \
   --become
 

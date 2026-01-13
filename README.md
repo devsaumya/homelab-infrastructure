@@ -67,8 +67,8 @@ Quick reference for top-level directories:
    ```
    Or manually:
    ```bash
-   ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.108
-   ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.0.1.109
+   ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.108
+   ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.109
    ```
 
 4. **Bootstrap VMs**:

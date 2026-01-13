@@ -415,8 +415,8 @@ nslookup nas.home.internal       # LAN DNS (after AdGuard)
 arp-scan -l                      # Find all IPs on subnet
 
 # SSH access
-ssh admin@10.0.1.108             # VM1
-ssh admin@10.0.1.109             # VM2
+ssh homelab@10.0.1.108             # VM1
+ssh homelab@10.0.1.109             # VM2
 ssh admin@10.0.1.50              # Synology (if SSH enabled)
 ```
 
@@ -446,11 +446,11 @@ ssh-keygen -t ed25519 -C "homelab-admin" \
   -f ~/.ssh/homelab_ed25519
 
 # Copy key to VMs
-ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.108
-ssh-copy-id -i ~/.ssh/homelab_ed25519.pub admin@10.0.1.109
+ssh-copy-id -i ~/.ssh/homelab_ed25519.pub homelab@10.0.1.108
+ssh-copy-id -i ~/.ssh/homelab_ed25519.pub homelab@10.0.1.109
 
 # Use key for login
-ssh -i ~/.ssh/homelab_ed25519 admin@10.0.1.108
+ssh -i ~/.ssh/homelab_ed25519 homelab@10.0.1.108
 ```
 
 ### Docker on Synology
@@ -483,7 +483,7 @@ ping 10.0.2.1              # Cross-VLAN to Trusted
 ping 10.0.10.1             # Cross-VLAN to IoT
 ping 8.8.8.8               # Internet
 nslookup google.com        # Public DNS
-ssh admin@10.0.1.108       # VM1 SSH
+ssh homelab@10.0.1.108       # VM1 SSH
 http://10.0.1.50:5000      # Synology DSM
 ```
 
@@ -498,7 +498,7 @@ nslookup google.com        # Public DNS
 # These should FAIL ✗ (blocked by firewall)
 ping 10.0.1.1              # Management gateway - BLOCK
 ping 10.0.1.50             # Synology - BLOCK
-ssh admin@10.0.1.108       # VM1 SSH - BLOCK
+ssh homelab@10.0.1.108       # VM1 SSH - BLOCK
 ```
 
 ### From IoT VLAN (10.0.10.x)

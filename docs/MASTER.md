@@ -239,11 +239,11 @@ Edit `infra/ansible/inventory/hosts.yml`:
 ```yaml
 k3s-master:
   ansible_host: 10.0.1.108  # Your k3s master IP
-  ansible_user: admin
+  ansible_user: homelab
 
 security-ops:
   ansible_host: 10.0.1.109  # Your VM2 IP
-  ansible_user: admin
+  ansible_user: homelab
 ```
 
 ### Step 3: Create Ansible Vault
@@ -349,7 +349,7 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Verify installation
-ssh admin@10.0.1.108
+ssh homelab@10.0.1.108
 sudo systemctl status k3s
 
 # Get kubeconfig
@@ -414,7 +414,7 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Deploy Docker Compose stack (on VM2)
-ssh admin@10.0.1.109
+ssh homelab@10.0.1.109
 cd /opt/docker/monitoring
 docker compose up -d
 ```
@@ -447,7 +447,7 @@ ansible-playbook -i infra/ansible/inventory/hosts.yml \
   --ask-vault-pass
 
 # Deploy Trivy (on VM2)
-ssh admin@10.0.1.109
+ssh homelab@10.0.1.109
 cd /opt/docker/security
 docker compose up -d
 ```
@@ -609,7 +609,7 @@ docker ps  # On VM2
 kubectl apply -k kubernetes/base/
 
 # Update Docker Compose services (on VM2)
-ssh admin@10.0.1.109
+ssh homelab@10.0.1.109
 cd /opt/docker/monitoring
 docker compose pull
 docker compose up -d
@@ -625,7 +625,7 @@ docker compose up -d
 kubectl delete -f kubernetes/base/
 
 # Stop Docker services (on VM2)
-ssh admin@10.0.1.109
+ssh homelab@10.0.1.109
 docker compose down
 ```
 
@@ -667,7 +667,7 @@ docker compose down
 
 ```bash
 # Check k3s logs
-ssh admin@10.0.1.108
+ssh homelab@10.0.1.108
 sudo journalctl -u k3s -f
 
 # Restart k3s
