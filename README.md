@@ -23,6 +23,18 @@ The infrastructure consists of:
 
 See [Master Documentation](docs/MASTER.md) for complete structure and conventions.
 
+## Directory Map
+
+Quick reference for top-level directories:
+
+| Directory | Purpose |
+|-----------|---------|
+| `infra/` | Provisioning (Ansible, Terraform) |
+| `k8s/` | GitOps (ArgoCD managed) |
+| `docker/` | Host-level services |
+| `scripts/` | Orchestration & utilities |
+| `docs/` | Architecture & ops |
+
 ## Quick Start
 
 ### Prerequisites
@@ -183,6 +195,7 @@ homelab-infrastructure/
 
 - **[Master Documentation](docs/MASTER.md)** - Complete reference guide ⭐ **START HERE**
 - **[Hardware Setup Guide](docs/HARDWARE_SETUP.md)** - Hardware configuration instructions
+- **[Next Steps](docs/NEXT_STEPS.md)** - Production hardening & maturity roadmap
 
 ## Security
 

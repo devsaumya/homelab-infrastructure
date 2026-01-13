@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: cloudflared
   namespace: cloudflare-tunnel
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
   labels:
     app: cloudflared
 spec:

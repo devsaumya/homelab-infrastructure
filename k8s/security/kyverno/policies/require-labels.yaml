@@ -1,0 +1,41 @@
+# Kyverno Policy: Require Labels
+# Ensures all resources have required labels for organization
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-labels
+  annotations:
+    policies.kyverno.io/title: Require Labels
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: Pod,Service,Deployment
+    policies.kyverno.io/description: >-
+      All resources must have app and version labels for proper organization
+      and management.
+spec:
+  validationFailureAction: audit  # Audit mode - warn but don't block
+  background: true
+  rules:
+    - name: check-labels
+      match:
+        resources:
+          kinds:
+            - Pod
+            - Service
+            - Deployment
+            - StatefulSet
+            - DaemonSet
+      exclude:
+        resources:
+          namespaces:
+            - kube-system
+            - kube-public
+            - kube-node-lease
+      validate:
+        message: "Resources should have 'app' and 'version' labels"
+        pattern:
+          metadata:
+            labels:
+              app: "?*"
+              version: "?*"
+

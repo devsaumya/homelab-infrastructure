@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: adguard-home
   namespace: dns-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
   labels:
     app: adguard-home
 spec:

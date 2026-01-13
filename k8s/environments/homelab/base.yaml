@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: base-infrastructure
   source:
     repoURL: https://github.com/devsaumya/homelab-infrastructure
     targetRevision: main

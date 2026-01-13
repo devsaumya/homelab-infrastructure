@@ -14,6 +14,8 @@ kind: ConfigMap
 metadata:
   name: kyverno-config
   namespace: kyverno
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 data:
   # Kyverno configuration placeholder
   # Actual config should come from Helm values

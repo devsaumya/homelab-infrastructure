@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: cloudflared-config
   namespace: cloudflare-tunnel
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
 data:
   config.yml: |
     tunnel: <TUNNEL_ID>

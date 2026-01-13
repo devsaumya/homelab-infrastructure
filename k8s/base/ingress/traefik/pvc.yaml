@@ -3,6 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: traefik-data
   namespace: ingress-traefik
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   accessModes:
     - ReadWriteOnce
