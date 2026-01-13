@@ -6,14 +6,3 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: argocd
----
-# ArgoCD Installation via Helm
-# This is a placeholder - actual installation should be done via:
-# kubectl create namespace argocd
-# helm repo add argo https://argoproj.github.io/argo-helm
-# helm install argocd argo/argo-cd -n argocd --values <values-file>
-#
-# Or use the official ArgoCD install manifest:
-# kubectl create namespace argocd
-# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
