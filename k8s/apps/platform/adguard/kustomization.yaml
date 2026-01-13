@@ -6,8 +6,9 @@ namespace: dns-system
 resources:
   - deployment.yaml
   - service.yaml
-  - pvc.yaml
+  - pvc-config.yaml
+  - pvc-work.yaml
+  - pvc-data.yaml
 
 commonLabels:
   app: adguard-home
-
