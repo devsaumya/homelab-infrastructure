@@ -10,13 +10,11 @@ spec:
   source:
     repoURL: https://github.com/devsaumya/homelab-infrastructure
     targetRevision: master
-    path: k8s/security
+    path: k8s/environments/homelab/security
   destination:
     server: https://kubernetes.default.svc
-    namespace: security
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
