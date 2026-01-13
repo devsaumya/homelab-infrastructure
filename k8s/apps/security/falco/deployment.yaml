@@ -1,23 +1,52 @@
-# Falco Runtime Security
-# Note: Falco is typically installed via Helm chart
-# This is a placeholder - use Helm for production deployment
-#
-# Installation command:
-# helm repo add falcosecurity https://falcosecurity.github.io/charts
-# helm repo update
-# helm install falco falcosecurity/falco \
-#   --namespace falco \
-#   --set driver.enabled=true \
-#   --set falco.grpc.enabled=true \
-#   --set falco.grpcOutput.enabled=true
-
-apiVersion: v1
-kind: ConfigMap
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
-  name: falco-config
-  namespace: falco
-data:
-  falco.yaml: |
-    # Falco configuration
-    # This is a placeholder - actual config should come from Helm values
+  name: falco
+spec:
+  selector:
+    matchLabels:
+      app: falco
+  template:
+    metadata:
+      labels:
+        app: falco
+    spec:
+      hostPID: true
+      hostNetwork: true
 
+      nodeSelector:
+        node-role: security
+
+      tolerations:
+      - key: "security"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+
+      containers:
+      - name: falco
+        image: falcosecurity/falco:0.38.2
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: dev-fs
+          mountPath: /host/dev
+        - name: proc-fs
+          mountPath: /host/proc
+        - name: modules
+          mountPath: /host/lib/modules
+        - name: containerd
+          mountPath: /run/containerd/containerd.sock
+      volumes:
+      - name: dev-fs
+        hostPath:
+          path: /dev
+      - name: proc-fs
+        hostPath:
+          path: /proc
+      - name: modules
+        hostPath:
+          path: /lib/modules
+      - name: containerd
+        hostPath:
+          path: /run/containerd/containerd.sock
