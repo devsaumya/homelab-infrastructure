@@ -1,57 +1,58 @@
 ---
-# Common role - Base system configuration
+# roles/common/tasks/main.yml
 
 - name: Update apt cache
   apt:
-    update_cache: true
+    update_cache: yes
     cache_valid_time: 3600
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Install base packages
   apt:
     name:
       - curl
-      - wget
-      - git
       - vim
-      - htop
-      - net-tools
-      - jq
-      - python3-pip
-      - unattended-upgrades
+      - git
+      - ca-certificates
+      - apt-transport-https
+      - gnupg
+      - lsb-release
     state: present
-    update_cache: true
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Set timezone
   timezone:
     name: "{{ timezone }}"
-  notify: restart cron
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Disable swap
-  shell: swapoff -a
-  ignore_errors: true
+  command: swapoff -a
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Comment out swap in /etc/fstab
-  lineinfile:
+  replace:
     path: /etc/fstab
-    regexp: '^([^#].*?\sswap\s)'
-    line: '\1'
-    backrefs: true
-    state: present
+    regexp: '^([^#].*swap.*)$'
+    replace: '# \1'
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Configure sysctl for Kubernetes
   sysctl:
     name: "{{ item.key }}"
     value: "{{ item.value }}"
     state: present
-    sysctl_set: true
-    reload: true
+    reload: yes
   loop:
     - { key: "net.bridge.bridge-nf-call-iptables", value: "1" }
     - { key: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
     - { key: "net.ipv4.ip_forward", value: "1" }
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Load required kernel modules
   modprobe:
@@ -60,15 +61,14 @@
   loop:
     - overlay
     - br_netfilter
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
 - name: Make kernel modules persistent
-  lineinfile:
-    path: /etc/modules-load.d/k8s.conf
-    line: "{{ item }}"
-    create: true
-  loop:
-    - overlay
-    - br_netfilter
-  when: ansible_os_family == "Debian"
-
+  copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      overlay
+      br_netfilter
+  when:
+    - ansible_os_family == "Debian"

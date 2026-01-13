@@ -1,8 +1,11 @@
 ---
-# Handlers for common role
+# roles/common/handlers/main.yml
 
 - name: restart cron
-  systemd:
+  service:
     name: cron
     state: restarted
-
+  when:
+    - ansible_os_family == "Debian"
+    - "'cron' in ansible_facts.services"
+  ignore_errors: yes
