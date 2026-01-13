@@ -1,12 +1,21 @@
 ---
-# k3s installation playbook
-- name: Install k3s control plane
-  hosts: k3s
+# =====================================
+# Install K3s Control Plane
+# =====================================
+- name: Install k3s server
+  hosts: k3s_server
   become: true
   roles:
     - common
     - k3s-master
-  tags:
-    - k3s
-    - kubernetes
+
+# =====================================
+# Install K3s Agent (Security Node)
+# =====================================
+- name: Install k3s agent
+  hosts: k3s_agent
+  become: true
+  roles:
+    - common
+    - k3s-agent
 

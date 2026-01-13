@@ -1,56 +1,68 @@
----
-# k3s master installation
+# =====================================
+# K3s Server (Control Plane) Installation
+# =====================================
 
-- name: Create k3s directory
+- name: Ensure k3s config directory exists
   file:
     path: /etc/rancher/k3s
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Download k3s install script
   get_url:
     url: https://get.k3s.io
-    dest: /tmp/install-k3s.sh
-    mode: '0755'
+    dest: /tmp/k3s-install.sh
+    mode: "0755"
 
 - name: Install k3s server
-  shell: |
-    export K3S_TOKEN="{{ vault_k3s_token }}"
-    export INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --cluster-init --flannel-backend=none"
-    /tmp/install-k3s.sh
-  # Note: Flannel is disabled to allow Cilium CNI installation
-  # Cilium will be installed separately via Helm after k3s is running
+  environment:
+    K3S_TOKEN: "{{ vault_k3s_token }}"
+    INSTALL_K3S_EXEC: >
+      server
+      --node-ip {{ ansible_host }}
+      --advertise-address {{ ansible_host }}
+      --tls-san {{ ansible_host }}
+      --disable traefik
+      --disable servicelb
+      --flannel-backend=none
+      --disable-network-policy
+  command: sh /tmp/k3s-install.sh
   args:
-    creates: /usr/local/bin/k3s
-  register: k3s_install
+    creates: /etc/systemd/system/k3s.service
 
-- name: Wait for k3s to be ready
+- name: Enable and start k3s service
+  systemd:
+    name: k3s
+    enabled: true
+    state: started
+
+- name: Wait for kubeconfig to exist
   wait_for:
     path: /etc/rancher/k3s/k3s.yaml
     timeout: 300
-  when: k3s_install.changed
 
-- name: Create .kube directory
+- name: Ensure .kube directory exists for homelab user
   file:
-    path: "{{ ansible_env.HOME }}/.kube"
+    path: /home/homelab/.kube
     state: directory
-    mode: '0755'
+    owner: homelab
+    group: homelab
+    mode: "0755"
 
-- name: Copy kubeconfig
+- name: Copy kubeconfig for homelab user
   copy:
     src: /etc/rancher/k3s/k3s.yaml
-    dest: "{{ ansible_env.HOME }}/.kube/config"
+    dest: /home/homelab/.kube/config
     remote_src: true
-    mode: '0600'
-  when: ansible_user != "root"
+    owner: homelab
+    group: homelab
+    mode: "0600"
 
-- name: Install kubectl
-  shell: |
-    if ! command -v kubectl &> /dev/null; then
-      curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-      chmod +x kubectl
-      mv kubectl /usr/local/bin/
-    fi
+- name: Install kubectl (if not present)
+  get_url:
+    url: https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: "0755"
   args:
     creates: /usr/local/bin/kubectl
-
+    

@@ -1,0 +1,32 @@
+---
+# =====================================
+# K3s Agent Installation
+# =====================================
+
+- name: Ensure k3s directories exist
+  file:
+    path: /etc/rancher/k3s
+    state: directory
+    mode: "0755"
+
+- name: Download k3s install script
+  get_url:
+    url: https://get.k3s.io
+    dest: /tmp/k3s-install.sh
+    mode: "0755"
+
+- name: Install k3s agent
+  environment:
+    K3S_URL: "https://10.0.1.108:6443"
+    K3S_TOKEN: "{{ vault_k3s_token }}"
+  command: >
+    sh /tmp/k3s-install.sh
+    agent
+  args:
+    creates: /etc/systemd/system/k3s-agent.service
+
+- name: Enable and start k3s-agent
+  systemd:
+    name: k3s-agent
+    enabled: true
+    state: started
