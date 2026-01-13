@@ -1,0 +1,134 @@
+# Falco Helm Chart Values
+# Using official falcosecurity/falco chart
+# Chart: https://github.com/falcosecurity/charts/tree/main/charts/falco
+
+driver:
+  enabled: true
+  kind: modern_ebpf  # Use modern eBPF driver (no kernel module needed)
+
+# Node selector for security nodes
+nodeSelector:
+  node-role: security
+
+# Tolerations for security nodes
+tolerations:
+  - key: "security"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+
+# Falco configuration
+falco:
+  rules_file:
+    - /etc/falco/falco_rules.yaml
+    - /etc/falco/falco_rules.local.yaml
+    - /etc/falco/rules.d
+
+  json_output: true
+  json_include_output_property: true
+  json_include_tags_property: true
+
+  log_stderr: true
+  log_syslog: false
+  log_level: info
+
+  # Outputs
+  http_output:
+    enabled: false
+  file_output:
+    enabled: false
+  stdout_output:
+    enabled: true
+
+# Resources
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+
+# Service account
+serviceAccount:
+  create: true
+  name: falco
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 65534
+
+containerSecurityContext:
+  privileged: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: true
+  capabilities:
+    add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - CHOWN
+      - DAC_READ_SEARCH
+      - SETGID
+      - SETUID
+
+# Extra volumes for host access
+extraVolumes:
+  - name: dev-fs
+    hostPath:
+      path: /dev
+  - name: proc-fs
+    hostPath:
+      path: /proc
+  - name: sys-fs
+    hostPath:
+      path: /sys
+  - name: boot-fs
+    hostPath:
+      path: /boot
+  - name: modules-fs
+    hostPath:
+      path: /lib/modules
+  - name: usr-fs
+    hostPath:
+      path: /usr
+  - name: etc-fs
+    hostPath:
+      path: /etc
+
+extraVolumeMounts:
+  - name: dev-fs
+    mountPath: /host/dev
+    readOnly: true
+  - name: proc-fs
+    mountPath: /host/proc
+    readOnly: true
+  - name: sys-fs
+    mountPath: /host/sys
+    readOnly: true
+  - name: boot-fs
+    mountPath: /host/boot
+    readOnly: true
+  - name: modules-fs
+    mountPath: /host/lib/modules
+    readOnly: true
+  - name: usr-fs
+    mountPath: /host/usr
+    readOnly: true
+  - name: etc-fs
+    mountPath: /host/etc
+    readOnly: true
+
+# Host network and PID
+hostNetwork: true
+hostPID: true
+
+# Image
+image:
+  repository: docker.io/falcosecurity/falco
+  tag: "0.38.2"
+  pullPolicy: IfNotPresent
+

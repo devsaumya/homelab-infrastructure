@@ -56,7 +56,7 @@ See [Master Documentation](docs/MASTER.md) for complete structure and convention
 
 4. **Install ArgoCD** (one-time manual step):
    ```bash
-   kubectl apply -f k8s/bootstrap/argocd-install.yaml
+   kubectl apply -f k8s/bootstrap/argocd/install.yaml
    ```
 
 5. **Deploy root application** (ArgoCD will manage everything):
@@ -68,22 +68,48 @@ See [Master Documentation](docs/MASTER.md) for complete structure and convention
 
 ```
 homelab-infrastructure/
-├── infra/              # Outside Kubernetes
-│   ├── terraform/      # Cloud / DNS / tunnels only
-│   ├── ansible/        # VM provisioning + k3s install
-│   ├── docker/         # Docker Compose stacks on VM2
-│   ├── contracts/      # Network/DNS/IPAM contracts
-│   ├── network/        # Network config generation
-│   └── dns/            # DNS config generation
-├── k8s/                # EVERYTHING ArgoCD deploys
-│   ├── bootstrap/      # Installed ONCE manually (ArgoCD)
-│   ├── apps/           # Real workloads
-│   │   ├── security/   # Security tools (Falco)
-│   │   └── platform/   # Platform services (Traefik, AdGuard, etc.)
-│   └── root-app.yaml   # ArgoCD "app of apps"
-├── scripts/            # Helper scripts only
-├── docs/               # Documentation
-└── .github/workflows/  # CI only (no deploy)
+├── infra/                    # Infrastructure as Code
+│   ├── terraform/            # Cloud / DNS / tunnels only
+│   ├── ansible/              # VM provisioning + k3s install
+│   ├── contracts/            # Source of truth (IPAM, VLANs, DNS zones)
+│   ├── network/              # Network config generation
+│   └── dns/                  # DNS config generation
+├── k8s/                      # Kubernetes manifests (GitOps)
+│   ├── bootstrap/            # Installed ONCE manually (ArgoCD)
+│   │   └── argocd/           # ArgoCD installation manifests
+│   ├── base/                 # Core infrastructure services
+│   │   ├── namespaces/       # Namespace definitions
+│   │   ├── metrics-server/   # Kubernetes metrics
+│   │   ├── cert-manager/     # TLS certificate management
+│   │   ├── networking/       # CNI and network policies
+│   │   │   ├── cilium/       # Cilium CNI
+│   │   │   └── network-policies/  # Network policies
+│   │   └── ingress/          # Ingress controller
+│   │       └── traefik/      # Traefik ingress
+│   ├── security/             # Security services
+│   │   ├── falco/            # Runtime security (Helm)
+│   │   ├── kyverno/          # Policy engine
+│   │   └── sealed-secrets/   # Secret management
+│   ├── apps/                 # Application workloads
+│   │   └── platform/         # Platform services
+│   │       ├── adguard/      # DNS filtering
+│   │       └── cloudflare-tunnel/  # External access
+│   ├── environments/        # Environment-specific configs
+│   │   └── homelab/          # Homelab environment
+│   │       ├── base.yaml     # Base services app
+│   │       ├── security.yaml # Security services app
+│   │       └── apps.yaml     # Application workloads app
+│   └── root-app.yaml         # ArgoCD root application
+├── docker/                   # Docker Compose stacks (VM2)
+│   ├── monitoring/           # Monitoring stack
+│   ├── security/             # Security tools
+│   └── services/             # Utility services
+├── scripts/                  # Helper scripts only
+├── docs/                     # Documentation
+└── .github/workflows/        # CI/CD workflows
+    ├── validate-k8s.yml      # K8s manifest validation
+    ├── validate-contracts.yml # Contract validation
+    └── terraform-plan.yml     # Terraform plan
 ```
 
 ## Deployment Order

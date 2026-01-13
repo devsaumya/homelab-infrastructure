@@ -12,20 +12,41 @@ Everything that runs **outside** Kubernetes or touches VMs/OS:
 
 - **`terraform/`**: Cloud resources (Cloudflare DNS, tunnels, WAF)
 - **`ansible/`**: VM provisioning, OS hardening, k3s installation
-- **`docker/`**: Docker Compose stacks on VM2 (monitoring, security, services)
 - **`contracts/`**: Network/DNS/IPAM contracts (source of truth)
 - **`network/`**: Network configuration generation scripts
 - **`dns/`**: DNS configuration generation scripts
 
+### Docker Layer (`docker/`)
+
+Docker Compose stacks running on VM2 (outside Kubernetes):
+
+- **`monitoring/`**: Prometheus, Grafana, Loki, AlertManager
+- **`security/`**: Security scanning tools
+- **`services/`**: Utility services
+
 ### Kubernetes Layer (`k8s/`)
 
-Everything that ArgoCD deploys:
+Everything that ArgoCD deploys (GitOps-managed):
 
-- **`bootstrap/`**: One-time manual installation (ArgoCD itself)
-- **`apps/`**: All applications managed by ArgoCD
-  - **`security/`**: Security tools (Falco, Kyverno)
-  - **`platform/`**: Platform services (Traefik, AdGuard, cert-manager, etc.)
-- **`root-app.yaml`**: ArgoCD "app of apps" pattern entry point
+- **`bootstrap/argocd/`**: One-time manual installation (ArgoCD itself)
+- **`base/`**: Core infrastructure services
+  - **`namespaces/`**: Namespace definitions
+  - **`metrics-server/`**: Kubernetes metrics
+  - **`cert-manager/`**: TLS certificate management
+  - **`networking/`**: CNI (Cilium) and network policies
+  - **`ingress/traefik/`**: Ingress controller
+- **`security/`**: Security services
+  - **`falco/`**: Runtime security (Helm chart)
+  - **`kyverno/`**: Policy engine
+  - **`sealed-secrets/`**: Secret management
+- **`apps/platform/`**: Application workloads
+  - **`adguard/`**: DNS filtering
+  - **`cloudflare-tunnel/`**: External access
+- **`environments/homelab/`**: Environment-specific ArgoCD Applications
+  - **`base.yaml`**: Base services application
+  - **`security.yaml`**: Security services application
+  - **`apps.yaml`**: Application workloads application
+- **`root-app.yaml`**: ArgoCD root application (app-of-apps pattern)
 
 ## Network Architecture
 
@@ -60,7 +81,9 @@ Everything that ArgoCD deploys:
    - Install ArgoCD to k3s cluster
 
 3. **Application Deployment** (GitOps)
-   - ArgoCD watches `k8s/apps/`
+   - ArgoCD root app watches `k8s/environments/homelab/`
+   - Creates three child applications: base, security, apps
+   - Each application manages its respective directory
    - Automatically syncs all applications
    - Self-healing and auto-pruning enabled
 

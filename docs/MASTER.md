@@ -828,7 +828,7 @@ homelab-infrastructure/
 - **Ansible vault**: `infra/ansible/inventory/group_vars/all/vault.yml`
 - **Terraform vars**: `infra/terraform/environments/production/terraform.tfvars`
 - **Kubernetes apps**: `k8s/apps/` (managed by ArgoCD)
-- **Docker Compose**: `infra/docker/monitoring/docker-compose.yml`
+- **Docker Compose**: `docker/monitoring/docker-compose.yml`
 
 ---
 

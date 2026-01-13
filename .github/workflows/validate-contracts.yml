@@ -1,0 +1,78 @@
+name: Validate Infrastructure Contracts
+
+on:
+  pull_request:
+    paths:
+      - 'infra/contracts/**'
+      - 'scripts/validation/**'
+      - '.github/workflows/validate-contracts.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/contracts/**'
+
+jobs:
+  validate:
+    name: Validate Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml jsonschema
+
+      - name: Validate contract YAML syntax
+        run: |
+          echo "Validating contract YAML files..."
+          find infra/contracts -type f \( -name "*.yaml" -o -name "*.yml" \) | while read file; do
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
+            echo "✓ $file"
+          done
+
+      - name: Run contract validation script
+        run: |
+          if [ -f scripts/validation/validate_contracts.py ]; then
+            python3 scripts/validation/validate_contracts.py
+          else
+            echo "Validation script not found, skipping..."
+          fi
+
+      - name: Check contract consistency
+        run: |
+          echo "Checking contract consistency..."
+          # Check for required contract files
+          required_files=("ipam.yaml" "vlans.yaml" "dns-zones.yaml" "platform.yaml")
+          for file in "${required_files[@]}"; do
+            if [ ! -f "infra/contracts/$file" ]; then
+              echo "Error: Required contract file missing: $file"
+              exit 1
+            fi
+          done
+          
+          # Basic validation: check YAML structure
+          python3 << 'EOF'
+          import yaml
+          import sys
+          
+          contracts = ['ipam.yaml', 'vlans.yaml', 'dns-zones.yaml', 'platform.yaml']
+          for contract in contracts:
+              try:
+                  with open(f'infra/contracts/{contract}', 'r') as f:
+                      data = yaml.safe_load(f)
+                      if not data:
+                          print(f"Error: {contract} is empty")
+                          sys.exit(1)
+                      print(f"✓ {contract} is valid")
+              except Exception as e:
+                  print(f"Error validating {contract}: {e}")
+                  sys.exit(1)
+          EOF
+

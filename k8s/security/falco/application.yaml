@@ -1,0 +1,71 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: falco
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/falcosecurity/charts
+    chart: falco
+    targetRevision: 2.7.0
+    helm:
+      releaseName: falco
+      # Key values for homelab security nodes
+      # Full values reference: k8s/security/falco/values.yaml
+      values: |
+        driver:
+          enabled: true
+          kind: modern_ebpf
+        nodeSelector:
+          node-role: security
+        tolerations:
+          - key: "security"
+            operator: "Equal"
+            value: "true"
+            effect: "NoSchedule"
+        hostNetwork: true
+        hostPID: true
+        image:
+          repository: docker.io/falcosecurity/falco
+          tag: "0.38.2"
+          pullPolicy: IfNotPresent
+        extraVolumes:
+          - name: dev-fs
+            hostPath:
+              path: /dev
+          - name: proc-fs
+            hostPath:
+              path: /proc
+          - name: sys-fs
+            hostPath:
+              path: /sys
+          - name: modules-fs
+            hostPath:
+              path: /lib/modules
+        extraVolumeMounts:
+          - name: dev-fs
+            mountPath: /host/dev
+            readOnly: true
+          - name: proc-fs
+            mountPath: /host/proc
+            readOnly: true
+          - name: sys-fs
+            mountPath: /host/sys
+            readOnly: true
+          - name: modules-fs
+            mountPath: /host/lib/modules
+            readOnly: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: falco
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
