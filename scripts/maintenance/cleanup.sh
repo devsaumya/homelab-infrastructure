@@ -12,7 +12,7 @@ cd "$PROJECT_ROOT"
 
 # Clean up Docker images
 echo "Cleaning up Docker images..."
-ansible all -i ansible/inventory/hosts.yml -m shell -a \
+ansible all -i infra/ansible/inventory/hosts.yml -m shell -a \
   "docker system prune -af --volumes" \
   --become || true
 
@@ -23,7 +23,7 @@ kubectl delete pods --field-selector=status.phase==Failed --all-namespaces || tr
 
 # Clean up old logs
 echo "Cleaning up old logs..."
-ansible all -i ansible/inventory/hosts.yml -m shell -a \
+ansible all -i infra/ansible/inventory/hosts.yml -m shell -a \
   "journalctl --vacuum-time=7d" \
   --become || true
 

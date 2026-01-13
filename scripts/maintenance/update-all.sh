@@ -13,21 +13,21 @@ cd "$PROJECT_ROOT"
 # Update k3s
 echo "Updating k3s..."
 ansible-playbook \
-  -i ansible/inventory/hosts.yml \
-  ansible/playbooks/01-k3s-install.yml \
+  -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/01-k3s-install.yml \
   --tags update
 
 # Update Docker images
 echo "Updating Docker images on monitoring host..."
-ansible monitoring -i ansible/inventory/hosts.yml -m shell -a \
+ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/monitoring && docker compose pull && docker compose up -d" \
   --become
 
-ansible monitoring -i ansible/inventory/hosts.yml -m shell -a \
+ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/security && docker compose pull && docker compose up -d" \
   --become
 
-ansible monitoring -i ansible/inventory/hosts.yml -m shell -a \
+ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/services && docker compose pull && docker compose up -d" \
   --become
 

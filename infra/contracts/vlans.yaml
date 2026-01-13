@@ -1,0 +1,21 @@
+vlans:
+  management:
+    id: 1
+    trust: admin
+    default_policy: deny
+  trusted:
+    id: 2
+    trust: user
+    default_policy: deny
+  iot:
+    id: 10
+    trust: untrusted
+    default_policy: deny
+  dmz:
+    id: 20
+    trust: untrusted
+    default_policy: deny
+  guest:
+    id: 99
+    trust: none
+    default_policy: deny

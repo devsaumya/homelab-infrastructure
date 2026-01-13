@@ -1,0 +1,42 @@
+access_matrix:
+  - from: management
+    to: "*"
+    action: allow
+  - from: trusted
+    to: management
+    action: deny
+  - from: trusted
+    to: "*"
+    action: allow
+  - from: iot
+    to: management
+    action: deny
+  - from: iot
+    to: trusted
+    action: deny
+  - from: iot
+    to: internet
+    action: allow
+  - from: dmz
+    to: management
+    action: allow
+    ports:
+      - 6443  # k3s API
+  - from: dmz
+    to: trusted
+    action: deny
+  - from: dmz
+    to: iot
+    action: deny
+  - from: dmz
+    to: internet
+    action: allow
+  - from: guest
+    to: "*"
+    action: deny
+  - from: guest
+    to: internet
+    action: allow
+  - from: "*"
+    to: internet
+    action: allow

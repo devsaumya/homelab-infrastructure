@@ -234,7 +234,7 @@ cd homelab-infrastructure
 
 ### Step 2: Configure Ansible Inventory
 
-Edit `ansible/inventory/hosts.yml`:
+Edit `infra/ansible/inventory/hosts.yml`:
 
 ```yaml
 k3s-master:
@@ -344,8 +344,8 @@ This will:
 
 ```bash
 # Install k3s control plane
-ansible-playbook -i ansible/inventory/hosts.yml \
-  ansible/playbooks/01-k3s-install.yml \
+ansible-playbook -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/01-k3s-install.yml \
   --ask-vault-pass
 
 # Verify installation
@@ -409,8 +409,8 @@ kubectl apply -k kubernetes/base/cloudflare-tunnel/
 
 ```bash
 # Prepare VM2
-ansible-playbook -i ansible/inventory/hosts.yml \
-  ansible/playbooks/02-monitoring.yml \
+ansible-playbook -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/02-monitoring.yml \
   --ask-vault-pass
 
 # Deploy Docker Compose stack (on VM2)
@@ -442,8 +442,8 @@ This will:
 
 ```bash
 # Run security playbook
-ansible-playbook -i ansible/inventory/hosts.yml \
-  ansible/playbooks/03-security.yml \
+ansible-playbook -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/03-security.yml \
   --ask-vault-pass
 
 # Deploy Trivy (on VM2)
@@ -511,7 +511,7 @@ docker compose up -d
 
 ### Terraform Variables
 
-Key variables in `terraform/environments/production/terraform.tfvars`:
+Key variables in `infra/terraform/environments/production/terraform.tfvars`:
 
 ```hcl
 internal_domain = "home.internal"
@@ -521,7 +521,7 @@ public_services = ["grafana", "home"]
 
 ### Ansible Variables
 
-Key variables in `ansible/inventory/group_vars/all/vault.yml`:
+Key variables in `infra/ansible/inventory/group_vars/all/vault.yml`:
 
 ```yaml
 vault_k3s_token: "..."
@@ -824,11 +824,11 @@ homelab-infrastructure/
 
 ### Important Files
 
-- **Ansible inventory**: `ansible/inventory/hosts.yml`
-- **Ansible vault**: `ansible/inventory/group_vars/all/vault.yml`
-- **Terraform vars**: `terraform/environments/production/terraform.tfvars`
-- **Kubernetes manifests**: `kubernetes/base/`
-- **Docker Compose**: `docker/monitoring/docker-compose.yml`
+- **Ansible inventory**: `infra/ansible/inventory/hosts.yml`
+- **Ansible vault**: `infra/ansible/inventory/group_vars/all/vault.yml`
+- **Terraform vars**: `infra/terraform/environments/production/terraform.tfvars`
+- **Kubernetes apps**: `k8s/apps/` (managed by ArgoCD)
+- **Docker Compose**: `infra/docker/monitoring/docker-compose.yml`
 
 ---
 

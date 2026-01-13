@@ -1,0 +1,10 @@
+platform:
+  virtualization: synology_vmm
+  kubernetes:
+    distribution: k3s
+    primary_node: k3s-master.home.internal
+  containers:
+    allowed: true
+    scope:
+      - infra
+      - non-cluster

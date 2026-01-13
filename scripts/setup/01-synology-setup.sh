@@ -20,5 +20,5 @@ echo "4. Create shared folder for k3s storage: /volume1/k3s-storage"
 echo "5. Set appropriate permissions for the shared folder"
 echo ""
 echo "After configuration, run the Ansible playbook to automate setup:"
-echo "  ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/00-bootstrap.yml"
+echo "  ansible-playbook -i infra/ansible/inventory/hosts.yml infra/ansible/playbooks/00-bootstrap.yml"
 

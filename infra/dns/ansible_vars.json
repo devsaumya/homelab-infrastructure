@@ -1,0 +1,40 @@
+{
+  "dns_zones": [
+    {
+      "name": "home.internal",
+      "type": "authoritative",
+      "records": [
+        {
+          "name": "nas",
+          "type": "A",
+          "value": "10.0.1.50"
+        },
+        {
+          "name": "k3s-master",
+          "type": "A",
+          "value": "10.0.1.100"
+        },
+        {
+          "name": "security-ops",
+          "type": "A",
+          "value": "10.0.1.105"
+        },
+        {
+          "name": "orbi-ap",
+          "type": "A",
+          "value": "10.0.1.200"
+        },
+        {
+          "name": "adguard",
+          "type": "A",
+          "value": "10.0.1.53"
+        }
+      ]
+    }
+  ],
+  "dns_policy": {
+    "ad_blocking": "mandatory",
+    "malware_protection": "enabled",
+    "dnssec": "enabled"
+  }
+}

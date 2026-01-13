@@ -42,11 +42,11 @@ See [Master Documentation](docs/MASTER.md) for complete structure and convention
 ### Initial Setup
 
 1. **Configure Ansible inventory**:
-   - Edit `ansible/inventory/hosts.yml` with your VM IPs
-   - Encrypt secrets: `ansible-vault encrypt ansible/inventory/group_vars/all/vault.yml`
+   - Edit `infra/ansible/inventory/hosts.yml` with your VM IPs
+   - Encrypt secrets: `ansible-vault encrypt infra/ansible/inventory/group_vars/all/vault.yml`
 
 2. **Configure Terraform**:
-   - Copy `terraform/environments/production/terraform.tfvars.example` to `terraform.tfvars`
+   - Copy `infra/terraform/environments/production/terraform.tfvars.example` to `terraform.tfvars`
    - Fill in your Cloudflare credentials
 
 3. **Bootstrap VMs**:
@@ -54,21 +54,36 @@ See [Master Documentation](docs/MASTER.md) for complete structure and convention
    ./scripts/setup/02-vm-bootstrap.sh
    ```
 
-4. **Deploy infrastructure**:
+4. **Install ArgoCD** (one-time manual step):
    ```bash
-   ./scripts/deployment/deploy-all.sh
+   kubectl apply -f k8s/bootstrap/argocd-install.yaml
+   ```
+
+5. **Deploy root application** (ArgoCD will manage everything):
+   ```bash
+   kubectl apply -f k8s/root-app.yaml
    ```
 
 ## Project Structure
 
 ```
 homelab-infrastructure/
-├── terraform/          # Terraform for Cloudflare, DNS, external infra
-├── ansible/            # VM provisioning & configuration
-├── kubernetes/          # Manifests for k3s cluster
-├── docker/              # Docker Compose stacks on VM2
-├── scripts/             # Helper scripts to glue IaC together
-└── docs/                # Documentation
+├── infra/              # Outside Kubernetes
+│   ├── terraform/      # Cloud / DNS / tunnels only
+│   ├── ansible/        # VM provisioning + k3s install
+│   ├── docker/         # Docker Compose stacks on VM2
+│   ├── contracts/      # Network/DNS/IPAM contracts
+│   ├── network/        # Network config generation
+│   └── dns/            # DNS config generation
+├── k8s/                # EVERYTHING ArgoCD deploys
+│   ├── bootstrap/      # Installed ONCE manually (ArgoCD)
+│   ├── apps/           # Real workloads
+│   │   ├── security/   # Security tools (Falco)
+│   │   └── platform/   # Platform services (Traefik, AdGuard, etc.)
+│   └── root-app.yaml   # ArgoCD "app of apps"
+├── scripts/            # Helper scripts only
+├── docs/               # Documentation
+└── .github/workflows/  # CI only (no deploy)
 ```
 
 ## Deployment Order
@@ -76,8 +91,9 @@ homelab-infrastructure/
 1. Configure ER605 (WAN, VLANs, DHCP, firewall) and Synology/VMs manually using the router/NAS UI
 2. Bootstrap VMs with Ansible (base OS hardening, packages, Docker, k3s)
 3. Provision external infra with Terraform (Cloudflare DNS, Cloudflare Tunnel, WAF/Zero Trust)
-4. Apply Kubernetes base + overlays to k3s
-5. Bring up Docker stacks on VM2 (monitoring, services, security)
+4. Install ArgoCD manually (one-time): `kubectl apply -f k8s/bootstrap/argocd-install.yaml`
+5. Deploy root application: `kubectl apply -f k8s/root-app.yaml` (ArgoCD will manage all apps)
+6. Bring up Docker stacks on VM2 (monitoring, services, security) via Ansible
 
 ## Network Configuration
 

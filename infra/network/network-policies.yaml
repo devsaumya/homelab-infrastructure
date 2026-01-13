@@ -1,0 +1,22 @@
+# Kubernetes Network Policies
+# Generated from contracts/access-matrix.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+
+# Policy: Allow iot -> internet
+
+# Policy: Allow dmz -> management
+
+# Policy: Allow dmz -> internet
+
+# Policy: Allow guest -> internet

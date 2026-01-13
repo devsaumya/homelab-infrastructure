@@ -13,8 +13,8 @@ cd "$PROJECT_ROOT"
 
 echo "Running Ansible bootstrap playbook..."
 ansible-playbook \
-  -i ansible/inventory/hosts.yml \
-  ansible/playbooks/00-bootstrap.yml \
+  -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/00-bootstrap.yml \
   --ask-become-pass
 
 echo "=== Bootstrap complete ==="

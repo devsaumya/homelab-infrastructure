@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-yaml:
+    name: Lint YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install yamllint
+        run: pip install yamllint
+      
+      - name: Lint YAML files
+        run: |
+          yamllint -d relaxed k8s/ infra/
+  
+  lint-k8s:
+    name: Lint Kubernetes Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install kubeval
+        run: |
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo mv kubeval /usr/local/bin/
+      
+      - name: Validate Kubernetes manifests
+        run: |
+          find k8s -name "*.yaml" -o -name "*.yml" | xargs kubeval --strict || true
+

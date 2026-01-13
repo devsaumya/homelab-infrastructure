@@ -12,13 +12,13 @@ cd "$PROJECT_ROOT"
 
 # Run Ansible playbook for monitoring
 ansible-playbook \
-  -i ansible/inventory/hosts.yml \
-  ansible/playbooks/02-monitoring.yml \
+  -i infra/ansible/inventory/hosts.yml \
+  infra/ansible/playbooks/02-monitoring.yml \
   --limit monitoring
 
 # Deploy Docker Compose stack
 echo "Deploying Docker Compose monitoring stack..."
-ansible monitoring -i ansible/inventory/hosts.yml -m shell -a \
+ansible monitoring -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/monitoring && docker compose up -d" \
   --become
 
