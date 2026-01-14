@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: sealed-secrets
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: security
 
@@ -15,6 +13,14 @@ spec:
     helm:
       values: |
         fullnameOverride: sealed-secrets
+
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
 
   destination:
     server: https://kubernetes.default.svc

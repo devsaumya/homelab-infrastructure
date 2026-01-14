@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: kyverno
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: security
 
@@ -14,7 +12,29 @@ spec:
     targetRevision: 3.2.6
     helm:
       values: |
-        installCRDs: true
+        crds:
+          install: true
+          annotations: false
+
+        admissionController:
+          replicas: 1
+
+        backgroundController:
+          replicas: 1
+
+        cleanupController:
+          replicas: 1
+
+        reportsController:
+          replicas: 1
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
 
   destination:
     server: https://kubernetes.default.svc
