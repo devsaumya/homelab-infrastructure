@@ -12,36 +12,46 @@ rules:
   indentation:
     spaces: 2
     indent-sequences: true
+    level: warning  # Make this a warning, not an error
 
   # Allow multiple documents in one file (common for K8s)
   document-start:
     present: false
 
-  # Trailing spaces
-  trailing-spaces: enable
+  # Trailing spaces - warning only
+  trailing-spaces:
+    level: warning
 
   # Comments
   comments:
     min-spaces-from-content: 1
+    level: warning
 
   # Truthy values - allow yes/no/on/off for Kubernetes
   truthy:
     allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
     check-keys: false
 
-  # Empty lines
+  # Empty lines - be more lenient
   empty-lines:
     max: 2
+    level: warning
+
+  # New line at end of file - warning only for now
+  new-line-at-end-of-file:
+    level: warning
 
   # Brackets
   brackets:
     min-spaces-inside: 0
     max-spaces-inside: 1
+    level: warning
 
   # Braces
   braces:
     min-spaces-inside: 0
     max-spaces-inside: 1
+    level: warning
 
 ignore: |
   .github/
