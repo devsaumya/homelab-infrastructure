@@ -7,13 +7,20 @@ spec:
   description: Security services (Falco, Kyverno, Sealed Secrets)
 
   sourceRepos:
+    # Your Git repo
     - https://github.com/devsaumya/homelab-infrastructure
-    - https://github.com/falcosecurity/charts
+
+    # Kyverno Helm repo
     - https://kyverno.github.io/kyverno/
+
+    # Sealed Secrets Helm repo
     - https://bitnami-labs.github.io/sealed-secrets
 
+    # Falco Helm repo
+    - https://falcosecurity.github.io/charts
+
   destinations:
-    # REQUIRED: allow ArgoCD to manage the Application object
+    # REQUIRED: allow ArgoCD to create Application CRs
     - namespace: argocd
       server: https://kubernetes.default.svc
 

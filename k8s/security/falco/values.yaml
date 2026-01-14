@@ -1,6 +1,6 @@
 # Falco Helm Chart Values
 # Using official falcosecurity/falco chart
-# Chart: https://github.com/falcosecurity/charts/tree/main/charts/falco
+# Chart: https://falcosecurity.github.io/charts/tree/main/charts/falco
 
 driver:
   enabled: true
