@@ -76,7 +76,8 @@ jobs:
           
           # Check for hardcoded default namespaces (excluding legitimate uses)
           echo "Checking for hardcoded default namespaces..."
-          if grep -r "namespace: default" k8s/base k8s/apps k8s/security --include="*.yaml" 2>/dev/null; then
+          # Exclude kustomization.yaml files as 'namespace: default' is valid there for injection
+          if grep -r "namespace: default" k8s/base k8s/apps k8s/security --include="*.yaml" --exclude="kustomization.yaml" 2>/dev/null; then
             echo "❌ ERROR: Found hardcoded 'namespace: default' in application manifests"
             echo "Network policies and kustomizations should use namespace injection instead"
             exit 1
