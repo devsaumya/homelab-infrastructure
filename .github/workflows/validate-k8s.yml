@@ -38,16 +38,17 @@ jobs:
             python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
           done
 
-      - name: Validate Kubernetes manifests
+      - name: Install kubeconform
         run: |
-          echo "Validating Kubernetes manifests..."
-          # Validate ArgoCD Applications
-          find k8s -name "*.yaml" -type f | while read file; do
-            if grep -q "kind: Application" "$file" || grep -q "kind:.*" "$file"; then
-              echo "Validating $file"
-              kubectl apply --dry-run=client -f "$file" || exit 1
-            fi
-          done
+          echo "Installing kubeconform..."
+          curl -sSL "https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz" | tar -xz -C /usr/local/bin
+          chmod +x /usr/local/bin/kubeconform
+
+      - name: Validate Kubernetes manifests (schema validation)
+        run: |
+          echo "Validating Kubernetes manifests with kubeconform..."
+          # Validate all manifests found under k8s/
+          find k8s -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 kubeconform -strict -summary -ignore-missing-schemas || exit 1
 
       - name: Validate kustomize builds
         run: |
