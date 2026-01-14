@@ -205,6 +205,7 @@ homelab-infrastructure/
 
 - **[Master Documentation](docs/MASTER.md)** - Complete reference guide ⭐ **START HERE**
 - **[Hardware Setup Guide](docs/HARDWARE_SETUP.md)** - Hardware configuration instructions
+- **[Network Policy Strategy](docs/NETWORK_POLICY_STRATEGY.md)** - Namespace injection and policy management
 - **[Next Steps](docs/NEXT_STEPS.md)** - Production hardening & maturity roadmap
 
 ## Security

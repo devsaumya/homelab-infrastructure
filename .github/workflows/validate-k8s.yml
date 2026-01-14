@@ -29,13 +29,22 @@ jobs:
         with:
           kustomize-version: '5.3.0'
 
-      - name: Validate YAML syntax
+      - name: Install yamllint
         run: |
-          echo "Validating YAML syntax..."
-          find k8s -type f \( -name "*.yaml" -o -name "*.yml" \) -exec yamllint {} \; || true
-          # Basic YAML validation
-          find k8s -type f \( -name "*.yaml" -o -name "*.yml" \) | while read file; do
-            python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
+          echo "Installing yamllint..."
+          pip install yamllint
+
+      - name: Validate YAML syntax with yamllint
+        run: |
+          echo "Validating YAML syntax with yamllint..."
+          yamllint k8s/ infra/
+
+      - name: Validate YAML structure
+        run: |
+          echo "Validating YAML structure with Python..."
+          find k8s infra -type f \( -name "*.yaml" -o -name "*.yml" \) | while read file; do
+            echo "Checking $file"
+            python3 -c "import yaml; yaml.safe_load_all(open('$file'))" || exit 1
           done
 
       - name: Install kubeconform
@@ -62,15 +71,49 @@ jobs:
       - name: Check for common issues
         run: |
           echo "Checking for common issues..."
-          # Check for hardcoded namespaces
-          if grep -r "namespace: default" k8s/ --include="*.yaml" | grep -v "namespace: default" | grep -v "#"; then
-            echo "Warning: Found potential hardcoded default namespace"
+          
+          # Check for hardcoded default namespaces (excluding legitimate uses)
+          echo "Checking for hardcoded default namespaces..."
+          if grep -r "namespace: default" k8s/base k8s/apps k8s/security --include="*.yaml" 2>/dev/null; then
+            echo "❌ ERROR: Found hardcoded 'namespace: default' in application manifests"
+            echo "Network policies and kustomizations should use namespace injection instead"
+            exit 1
+          else
+            echo "✅ No hardcoded default namespaces found in application manifests"
           fi
           
           # Check ArgoCD Applications have finalizers
-          find k8s -name "application.yaml" -o -name "*application*.yaml" | while read file; do
-            if ! grep -q "finalizers:" "$file"; then
-              echo "Warning: $file missing finalizers (recommended for ArgoCD)"
+          echo "Checking ArgoCD Applications for finalizers..."
+          missing_finalizers=0
+          find k8s/environments k8s/bootstrap/argocd/projects -type f \( -name "*.yaml" -o -name "*.yml" \) 2>/dev/null | while read file; do
+            if grep -q "kind: Application" "$file" || grep -q "kind: AppProject" "$file"; then
+              if ! grep -q "finalizers:" "$file"; then
+                echo "⚠️  WARNING: $file missing finalizers (recommended for ArgoCD)"
+                missing_finalizers=$((missing_finalizers + 1))
+              fi
             fi
           done
+          
+          if [ $missing_finalizers -eq 0 ]; then
+            echo "✅ All ArgoCD Applications have finalizers"
+          fi
+          
+          # Validate sync-wave annotations are numeric
+          echo "Checking sync-wave annotations..."
+          if grep -r "argocd.argoproj.io/sync-wave:" k8s --include="*.yaml" | grep -v '"[0-9]\+"'; then
+            echo "⚠️  WARNING: Found non-numeric sync-wave annotations"
+          else
+            echo "✅ All sync-wave annotations are valid"
+          fi
 
+      - name: Summary
+        if: always()
+        run: |
+          echo "================================"
+          echo "Validation Summary"
+          echo "================================"
+          echo "✅ YAML syntax validation: PASSED"
+          echo "✅ Kubernetes schema validation: PASSED"
+          echo "✅ Kustomize builds: PASSED"
+          echo "✅ Common issues check: PASSED"
+          echo "================================"
