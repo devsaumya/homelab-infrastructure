@@ -14,3 +14,12 @@ spec:
       server: https://kubernetes.default.svc
 
   clusterResourceWhitelist: []
+
+  roles:
+    - name: admin
+      policies:
+        - p, proj:applications:admin, applications, *, applications/*, allow
+        - p, proj:applications:admin, repositories, get, *, allow
+      groups:
+        - homelab-admins
+        - developers

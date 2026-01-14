@@ -1,19 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homelab-root
+  name: kyverno
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: bootstrap
+  project: security
+
   source:
     repoURL: https://github.com/devsaumya/homelab-infrastructure
     targetRevision: master
-    path: k8s/environments/homelab
+    path: k8s/security/kyverno
+
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: kyverno
+
   syncPolicy:
     automated:
       prune: true

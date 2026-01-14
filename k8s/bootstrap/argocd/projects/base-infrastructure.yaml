@@ -34,3 +34,12 @@ spec:
       kind: NetworkPolicy
     - group: cert-manager.io
       kind: ClusterIssuer
+
+  roles:
+    - name: admin
+      policies:
+        - p, proj:base-infrastructure:admin, applications, *, base-infrastructure/*, allow
+        - p, proj:base-infrastructure:admin, repositories, get, *, allow
+      groups:
+        - homelab-admins
+        - platform-team
