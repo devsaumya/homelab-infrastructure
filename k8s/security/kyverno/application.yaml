@@ -13,8 +13,7 @@ spec:
     helm:
       values: |
         crds:
-          install: true
-          annotations: false
+          install: false
 
         admissionController:
           replicas: 1

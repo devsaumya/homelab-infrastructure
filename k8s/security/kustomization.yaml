@@ -5,5 +5,6 @@ namespace: argocd
 
 resources:
   - falco/application.yaml
+  - kyverno-crds-app.yaml
   - kyverno/application.yaml
   - sealed-secrets/application.yaml
