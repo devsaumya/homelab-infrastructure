@@ -22,10 +22,11 @@ rules:
   trailing-spaces:
     level: warning
 
-  # Comments
+  # Comments - required by ansible-lint
   comments:
     min-spaces-from-content: 1
     level: warning
+  comments-indentation: false  # Required by ansible-lint
 
   # Truthy values - allow yes/no/on/off for Kubernetes
   truthy:
@@ -40,6 +41,11 @@ rules:
   # New line at end of file - warning only for now
   new-line-at-end-of-file:
     level: warning
+
+  # Octal values - required by ansible-lint
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
 
   # Brackets
   brackets:
