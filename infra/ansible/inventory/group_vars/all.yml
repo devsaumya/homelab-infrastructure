@@ -29,4 +29,3 @@ log_server: "10.0.1.1"  # OPNsense syslog
 # Backup
 backup_enabled: true
 backup_retention_days: 30
-

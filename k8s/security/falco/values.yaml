@@ -131,4 +131,3 @@ image:
   repository: docker.io/falcosecurity/falco
   tag: "0.38.2"
   pullPolicy: IfNotPresent
-

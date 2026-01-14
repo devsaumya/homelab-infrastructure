@@ -7,4 +7,3 @@ metadata:
   labels:
     name: dns-system
     purpose: dns-blocking
-

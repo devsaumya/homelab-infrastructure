@@ -18,4 +18,3 @@
     shell: /bin/false
     home: /data/prometheus
     create_home: true
-

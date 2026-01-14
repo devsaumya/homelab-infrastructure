@@ -9,4 +9,3 @@
   loop:
     - /opt/docker/monitoring/loki
     - /data/loki
-

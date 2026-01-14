@@ -7,4 +7,3 @@ metadata:
   labels:
     name: kyverno
     purpose: policy-management
-

@@ -29,4 +29,3 @@
         - /opt/docker/services
       when: "'security-ops' in inventory_hostname or 'security-ops' in group_names"
       ignore_errors: true
-

@@ -55,4 +55,3 @@ spec:
       - name: work
         persistentVolumeClaim:
           claimName: adguard-work
-

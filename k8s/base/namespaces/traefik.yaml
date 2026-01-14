@@ -7,4 +7,3 @@ metadata:
   labels:
     name: ingress-traefik
     purpose: ingress-controller
-

@@ -7,4 +7,3 @@ metadata:
   labels:
     name: cilium-system
     purpose: cni
-

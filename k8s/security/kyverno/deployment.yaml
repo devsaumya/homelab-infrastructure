@@ -19,4 +19,3 @@ metadata:
 data:
   # Kyverno configuration placeholder
   # Actual config should come from Helm values
-

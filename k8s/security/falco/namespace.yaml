@@ -7,4 +7,3 @@ metadata:
   labels:
     name: falco
     purpose: runtime-security
-

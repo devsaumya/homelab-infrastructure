@@ -6,4 +6,3 @@ resources:
   - traefik.yaml
   - monitoring.yaml
   - security.yaml
-

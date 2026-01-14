@@ -7,4 +7,3 @@ metadata:
   labels:
     name: sealed-secrets
     purpose: secret-management
-

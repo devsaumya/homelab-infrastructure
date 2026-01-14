@@ -13,4 +13,3 @@
 - name: Set Grafana admin password
   set_fact:
     grafana_admin_password: "{{ vault_grafana_admin_password | default('admin') }}"
-
