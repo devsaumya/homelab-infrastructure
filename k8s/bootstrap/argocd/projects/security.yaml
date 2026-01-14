@@ -9,6 +9,8 @@ spec:
   sourceRepos:
     - https://github.com/devsaumya/homelab-infrastructure
     - https://github.com/falcosecurity/charts
+    - https://kyverno.github.io/kyverno/
+    - https://bitnami-labs.github.io/sealed-secrets
 
   destinations:
     # REQUIRED: allow ArgoCD to manage the Application object

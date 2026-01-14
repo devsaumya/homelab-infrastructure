@@ -4,6 +4,6 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - falco.yaml
-  - kyverno.yaml
-  - sealed-secrets.yaml
+  - falco/application.yaml
+  - kyverno/application.yaml
+  - sealed-secrets/application.yaml
