@@ -11,6 +11,11 @@ spec:
     - https://github.com/falcosecurity/charts
 
   destinations:
+    # REQUIRED: allow ArgoCD to manage the Application object
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+
+    # Security workloads
     - namespace: falco
       server: https://kubernetes.default.svc
     - namespace: kyverno
@@ -25,3 +30,12 @@ spec:
       kind: "*"
     - group: policy.kyverno.io
       kind: "*"
+
+  roles:
+    - name: admin
+      policies:
+        - p, proj:security:admin, applications, *, security/*, allow
+        - p, proj:security:admin, repositories, get, *, allow
+      groups:
+        - homelab-admins
+        - security-team
