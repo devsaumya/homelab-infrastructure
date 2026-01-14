@@ -58,8 +58,8 @@ jobs:
       - name: Validate Kubernetes manifests (schema validation)
         run: |
           echo "Validating Kubernetes manifests with kubeconform..."
-          # Validate all manifests found under k8s/
-          find k8s -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 kubeconform -strict -summary -ignore-missing-schemas || exit 1
+          # Validate all manifests found under k8s/, excluding Helm values files
+          find k8s -type f \( -name "*.yaml" -o -name "*.yml" \) ! -name "values.yaml" ! -name "values.yml" -print0 | xargs -0 kubeconform -strict -summary -ignore-missing-schemas || exit 1
 
       - name: Validate kustomize builds
         run: |
