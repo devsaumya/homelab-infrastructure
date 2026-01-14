@@ -4,47 +4,32 @@ metadata:
   name: security
   namespace: argocd
 spec:
-  description: Security services (Falco, Kyverno, Sealed Secrets)
+  description: Security controllers and policies
 
   sourceRepos:
-    # Your Git repo
     - https://github.com/devsaumya/homelab-infrastructure
-
-    # Kyverno Helm repo
     - https://kyverno.github.io/kyverno/
-
-    # Sealed Secrets Helm repo
     - https://bitnami-labs.github.io/sealed-secrets
-
-    # Falco Helm repo
     - https://falcosecurity.github.io/charts
 
   destinations:
-    # REQUIRED: allow ArgoCD to create Application CRs
+    # REQUIRED so ArgoCD can create child Applications
     - namespace: argocd
       server: https://kubernetes.default.svc
 
-    # Security workloads
-    - namespace: falco
-      server: https://kubernetes.default.svc
+    # Controller namespaces
     - namespace: kyverno
       server: https://kubernetes.default.svc
     - namespace: sealed-secrets
       server: https://kubernetes.default.svc
+    - namespace: falco
+      server: https://kubernetes.default.svc
 
+  # REQUIRED for controllers
   clusterResourceWhitelist:
-    - group: ""
-      kind: Namespace
-    - group: kyverno.io
-      kind: "*"
-    - group: policy.kyverno.io
-      kind: "*"
+    - group: '*'
+      kind: '*'
 
-  roles:
-    - name: admin
-      policies:
-        - p, proj:security:admin, applications, *, security/*, allow
-        - p, proj:security:admin, repositories, get, *, allow
-      groups:
-        - homelab-admins
-        - security-team
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

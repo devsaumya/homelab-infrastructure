@@ -11,10 +11,20 @@ spec:
     chart: falco
     targetRevision: 2.7.0
     helm:
-      releaseName: falco
-      values:
+      values: |
         falco:
           jsonOutput: true
+
+        falcosidekick:
+          enabled: false
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
 
   destination:
     server: https://kubernetes.default.svc
