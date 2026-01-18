@@ -35,8 +35,6 @@ jobs:
       - name: Run ansible-lint
         run: |
           echo "Running ansible-lint on playbooks..."
-          # Set role path to find roles correctly
-          export ANSIBLE_ROLES_PATH=infra/ansible/roles
           # Skip syntax-check since roles may not be installed in CI
           ansible-lint --skip-list syntax-check infra/ansible/playbooks/*.yml || true
           
