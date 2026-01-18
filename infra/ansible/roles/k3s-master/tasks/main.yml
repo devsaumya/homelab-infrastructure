@@ -49,7 +49,7 @@
     mode: '0600'
     remote_src: true
 
-# ---- kubectl install (CORRECT & IDEMPOTENT) ----
+# ---- kubectl install (FIXED URL) ----
 
 - name: Check if kubectl is already installed
   stat:
@@ -58,7 +58,7 @@
 
 - name: Download kubectl binary
   get_url:
-    url: "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    url: "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
     dest: /usr/local/bin/kubectl
     mode: '0755'
   when: not kubectl_stat.stat.exists
