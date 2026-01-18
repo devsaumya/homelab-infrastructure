@@ -1,6 +1,8 @@
 name: Validate Ansible Playbooks
 
 on:
+  # 🔑 Enables manual triggering from the GitHub Actions tab
+  workflow_dispatch:
   pull_request:
     paths:
       - 'infra/ansible/**'
@@ -16,9 +18,11 @@ jobs:
     name: Ansible Lint
     runs-on: ubuntu-latest
     env:
-      # 🔑 Ensures Ansible finds the config file and roles directory
+      # 🔑 Required: Points the runner to your custom config and roles
       ANSIBLE_CONFIG: ${{ github.workspace }}/infra/ansible/ansible.cfg
       ANSIBLE_ROLES_PATH: ${{ github.workspace }}/infra/ansible/roles
+      # 🔑 Required for decrypting vault.yml during linting
+      ANSIBLE_VAULT_PASSWORD_FILE: ${{ github.workspace }}/.vault_pass
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,36 +36,39 @@ jobs:
         run: |
           pip install ansible ansible-lint
 
+      - name: Create vault password file
+        # 🔑 Creates a temporary file from your GitHub repository secret
+        run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass
+
       - name: Run ansible-lint
         run: |
           echo "Running ansible-lint on playbooks..."
-          # Skip syntax-check since roles may not be installed in CI
-          ansible-lint --skip-list syntax-check infra/ansible/playbooks/*.yml || true
+          # syntax-check is handled by the dedicated step below
+          ansible-lint --skip-list syntax-check infra/ansible/playbooks/*.yml
           
-          echo "Running ansible-lint on roles..."
-          find infra/ansible/roles -name "*.yml" -type f | while read file; do
-            echo "Linting $file"
-            ansible-lint --skip-list syntax-check "$file" || true
-          done
-
       - name: Validate Ansible syntax
         run: |
           echo "Validating Ansible playbook syntax..."
           find infra/ansible/playbooks -name "*.yml" -type f | while read file; do
             echo "Validating $file"
-            ansible-playbook --syntax-check "$file" -i infra/ansible/inventory/hosts.yml || exit 1
+            # Now correctly finds the 'common' role and decrypts vault variables
+            ansible-playbook --syntax-check "$file" -i infra/ansible/inventory/hosts.yml
           done
 
       - name: Check for best practices
         run: |
           echo "Checking for Ansible best practices..."
-          # Check for vault encrypted files
+          # Verify vault encryption is used
           if find infra/ansible -name "vault.yml" -type f | grep -v ".encrypted"; then
             echo "Warning: Found vault.yml files that may not be encrypted"
           fi
           
-          # Check for hardcoded secrets (basic check)
+          # Basic check for hardcoded secrets
           if grep -r "password:" infra/ansible/ --include="*.yml" | grep -v "vault" | grep -v "#"; then
-            echo "Warning: Found potential hardcoded passwords (use vault instead)"
+            echo "Warning: Found potential hardcoded passwords"
           fi
 
+      - name: Cleanup
+        # Ensure the vault password file is removed even if the job fails
+        if: always()
+        run: rm -f .vault_pass
