@@ -41,19 +41,7 @@
   when:
     - ansible_os_family == "Debian"
 
-- name: Configure sysctl for Kubernetes
-  sysctl:
-    name: "{{ item.key }}"
-    value: "{{ item.value }}"
-    state: present
-    reload: yes
-  loop:
-    - { key: "net.bridge.bridge-nf-call-iptables", value: "1" }
-    - { key: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
-    - { key: "net.ipv4.ip_forward", value: "1" }
-  when:
-    - ansible_os_family == "Debian"
-
+# Load kernel modules BEFORE sysctl configuration
 - name: Load required kernel modules
   modprobe:
     name: "{{ item }}"
@@ -70,5 +58,20 @@
     content: |
       overlay
       br_netfilter
+    mode: '0644'
+  when:
+    - ansible_os_family == "Debian"
+
+# Now sysctl settings will work since br_netfilter is loaded
+- name: Configure sysctl for Kubernetes
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: "net.bridge.bridge-nf-call-iptables", value: "1" }
+    - { key: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
+    - { key: "net.ipv4.ip_forward", value: "1" }
   when:
     - ansible_os_family == "Debian"
