@@ -50,13 +50,43 @@ Everything that ArgoCD deploys (GitOps-managed):
 
 ## Network Architecture
 
+### Hardware Infrastructure
+
+- **Router**: TP-Link ER605 (VLAN Controller, Firewall, Gateway)
+- **NAS**: Synology DS720+ (VM Host & Management Server - 10.0.1.100)
+- **WiFi**: Netgear Orbi RBR350 + RBS350 (Isolated AP Mode - 10.0.10.100/101)
+- **Admin PC**: Management Workstation (10.0.1.105)
+
 ### VLANs
 
-- **VLAN 1 (Management)**: 10.0.1.0/24 - Admin/operational
-- **VLAN 2 (Trusted LAN)**: 10.0.2.0/24 - Personal devices
-- **VLAN 10 (IoT)**: 10.0.10.0/24 - Untrusted IoT devices
-- **VLAN 20 (DMZ)**: 10.0.20.0/24 - Exposed services
-- **VLAN 99 (Guest)**: 10.0.99.0/24 - Guest network
+| VLAN | Name | Subnet | Isolation | Purpose |
+|------|------|--------|-----------|---------|
+| **1** | Management | 10.0.1.0/24 | **DEISOLATED** (Admin) | Admin/operational, VM host |
+| **10** | Trusted_WiFi | 10.0.10.0/24 | **ISOLATED** (IoT) | WiFi devices, Orbi mesh |
+| **2** | Trusted_LAN | 10.0.2.0/24 | **ISOLATED** | Future wired devices |
+| **20** | DMZ | 10.0.20.0/24 | **ISOLATED** | Exposed services, Traefik |
+| **99** | Guest | 10.0.99.0/24 | **ISOLATED** | Guest WiFi, Internet only |
+
+**Isolation Model**:
+- **DEISOLATED (Management)**: Full bidirectional access to all VLANs
+- **ISOLATED (All Others)**: Internet access only, blocked from inter-VLAN communication
+
+See [NETWORK_ARCHITECTURE.md](./NETWORK_ARCHITECTURE.md) for comprehensive network documentation.
+
+### Network Documentation
+
+- **[Network Architecture Guide](./NETWORK_ARCHITECTURE.md)** - Comprehensive network design reference
+- **[Network Quick Reference](./NETWORK_QUICK_REFERENCE.md)** - One-page cheat sheet for VLANs, IPs, and ports
+- **[Network Troubleshooting](./NETWORK_TROUBLESHOOTING.md)** - Systematic troubleshooting procedures
+- **[ER605 VLAN Config](../infra/network/ER605_VLAN_CONFIG.md)** - Router port mappings and VLAN setup
+- **[Firewall Rules](../infra/network/FIREWALL_RULES.md)** - Complete ACL and security policies
+- **[WiFi Configuration](../infra/network/WIFI_CONFIG.md)** - Orbi mesh setup and multi-SSID config
+
+### Visual Diagrams
+
+- [VLAN Topology Diagram](./diagrams/vlan_topology.png) - VLAN segmentation and trust zones
+- [Physical Topology Diagram](./diagrams/physical_topology.png) - Hardware connections and port mappings
+- [Traffic Flow Diagram](./diagrams/traffic_flow.png) - Inter-VLAN routing and firewall enforcement
 
 ### Key Components
 
