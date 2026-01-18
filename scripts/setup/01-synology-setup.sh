@@ -7,7 +7,7 @@ set -euo pipefail
 echo "=== Synology NAS Setup ==="
 
 SYNOLOGY_IP="${SYNOLOGY_IP:-10.0.1.100}"
-SYNOLOGY_USER="${SYNOLOGY_USER:-admin}"
+SYNOLOGY_USER="${SYNOLOGY_USER:-homelabadmin}"
 
 echo "Synology IP: $SYNOLOGY_IP"
 echo "Synology User: $SYNOLOGY_USER"
