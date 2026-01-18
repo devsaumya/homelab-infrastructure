@@ -45,6 +45,10 @@ jobs:
       - name: Validate Ansible syntax
         run: |
           echo "Validating Ansible playbook syntax..."
+          # Set environment to use ansible.cfg from infra/ansible/
+          export ANSIBLE_CONFIG=infra/ansible/ansible.cfg
+          export ANSIBLE_ROLES_PATH=infra/ansible/roles
+          
           find infra/ansible/playbooks -name "*.yml" -type f | while read file; do
             echo "Validating $file"
             ansible-playbook --syntax-check "$file" -i infra/ansible/inventory/hosts.yml || exit 1
