@@ -1,8 +1,9 @@
 name: Validate Ansible Playbooks
 
 on:
-  # 🔑 Enables manual triggering from the GitHub Actions tab
+  # 🔑 Enables the 'Run workflow' button in the GitHub Actions UI
   workflow_dispatch:
+  
   pull_request:
     paths:
       - 'infra/ansible/**'
@@ -17,12 +18,13 @@ jobs:
   lint:
     name: Ansible Lint
     runs-on: ubuntu-latest
+    
+    # 🔑 Global environment variables to ensure roles and config are found
     env:
-      # 🔑 Required: Points the runner to your custom config and roles
       ANSIBLE_CONFIG: ${{ github.workspace }}/infra/ansible/ansible.cfg
       ANSIBLE_ROLES_PATH: ${{ github.workspace }}/infra/ansible/roles
-      # 🔑 Required for decrypting vault.yml during linting
       ANSIBLE_VAULT_PASSWORD_FILE: ${{ github.workspace }}/.vault_pass
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,7 +39,7 @@ jobs:
           pip install ansible ansible-lint
 
       - name: Create vault password file
-        # 🔑 Creates a temporary file from your GitHub repository secret
+        # 🔑 Generates a temporary password file from your GitHub Secret
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass
 
       - name: Run ansible-lint
@@ -46,6 +48,12 @@ jobs:
           # syntax-check is handled by the dedicated step below
           ansible-lint --skip-list syntax-check infra/ansible/playbooks/*.yml
           
+          echo "Running ansible-lint on roles..."
+          find infra/ansible/roles -name "*.yml" -type f | while read file; do
+            echo "Linting $file"
+            ansible-lint --skip-list syntax-check "$file"
+          done
+
       - name: Validate Ansible syntax
         run: |
           echo "Validating Ansible playbook syntax..."
@@ -58,17 +66,17 @@ jobs:
       - name: Check for best practices
         run: |
           echo "Checking for Ansible best practices..."
-          # Verify vault encryption is used
+          # Verify vault encryption is used for sensitive files
           if find infra/ansible -name "vault.yml" -type f | grep -v ".encrypted"; then
             echo "Warning: Found vault.yml files that may not be encrypted"
           fi
           
           # Basic check for hardcoded secrets
           if grep -r "password:" infra/ansible/ --include="*.yml" | grep -v "vault" | grep -v "#"; then
-            echo "Warning: Found potential hardcoded passwords"
+            echo "Warning: Found potential hardcoded passwords (use vault instead)"
           fi
 
       - name: Cleanup
-        # Ensure the vault password file is removed even if the job fails
+        # 🔑 Ensures the password file is deleted even if previous steps fail
         if: always()
         run: rm -f .vault_pass
