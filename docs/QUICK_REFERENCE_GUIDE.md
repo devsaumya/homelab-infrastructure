@@ -15,7 +15,7 @@
 GATEWAY & CORE:
 ├─ ER605 Router Primary: 10.0.1.1
 ├─ ER605 Management: 192.168.0.1 (factory default)
-├─ Synology NAS: 10.0.1.50 (port 5000)
+├─ Synology NAS: 10.0.1.100 (port 5000)
 ├─ Orbi RBR350: 10.0.1.200
 └─ UPS Backup Power: Local only (no IP)
 
@@ -121,7 +121,7 @@ VLAN 99 (Guest):
 ### DHCP Reservations
 
 ```
-☐ Synology: 10.0.1.50 (MAC from device label)
+☐ Synology: 10.0.1.100 (MAC from device label)
 ☐ VM1: 10.0.1.108 (MAC after creation)
 ☐ VM2: 10.0.1.109 (MAC after creation)
 ☐ Orbi: 10.0.1.200 (MAC from Orbi status page)
@@ -244,7 +244,7 @@ WiFi 3 - Orbi-Guest (VLAN 99):
 ### DSM Access & Setup (15 min)
 
 ```
-☐ Browser: http://10.0.1.50:5000 (or find via Synology Assistant)
+☐ Browser: http://10.0.1.100:5000 (or find via Synology Assistant)
 ☐ Accept Terms of Service
 ☐ Create admin account (STRONG password, saved)
 ☐ Skip QuickConnect
@@ -283,7 +283,7 @@ Verification:
 ```
 ☐ Control Panel → Network → Network Interface → LAN
 ☐ IPv4: Manual
-☐ IP: 10.0.1.50
+☐ IP: 10.0.1.100
 ☐ Netmask: 255.255.255.0
 ☐ Gateway: 10.0.1.1
 ☐ DNS 1: 1.1.1.1
@@ -315,13 +315,13 @@ Time Zone:
 ☐ Folder 2: vms (/volume1/vms)
 ☐ Folder 3: backups (/volume1/backups)
 ☐ All with Recycle Bin enabled
-☐ Verify access: smb://10.0.1.50/docker
+☐ Verify access: smb://10.0.1.100/docker
 ```
 
 ### Final Synology Verification
 
 ```
-☐ DSM accessible at http://10.0.1.50:5000
+☐ DSM accessible at http://10.0.1.100:5000
 ☐ Storage pool: Normal status
 ☐ Volume: Ready status
 ☐ Docker installed and visible
@@ -381,7 +381,7 @@ In Cloudflare Tunnel UI:
 ☐ Hostname 2: vault.connect2home.online → 10.0.1.109:8080
 ☐ Hostname 3: prometheus.connect2home.online → 10.0.1.109:9090
 ☐ Hostname 4: home.connect2home.online → 10.0.1.80:9000
-☐ Hostname 5: nas.connect2home.online → 10.0.1.50:5000
+☐ Hostname 5: nas.connect2home.online → 10.0.1.100:5000
 ☐ All routes saved
 ```
 
@@ -405,7 +405,7 @@ In Cloudflare Tunnel UI:
 # Test basic connectivity
 ping 10.0.1.1                    # ER605 gateway
 ping 8.8.8.8                     # Internet
-ping 10.0.1.50                   # Synology
+ping 10.0.1.100                   # Synology
 
 # Test DNS
 nslookup google.com              # Public DNS
@@ -417,24 +417,24 @@ arp-scan -l                      # Find all IPs on subnet
 # SSH access
 ssh homelab@10.0.1.108             # VM1
 ssh homelab@10.0.1.109             # VM2
-ssh admin@10.0.1.50              # Synology (if SSH enabled)
+ssh admin@10.0.1.100              # Synology (if SSH enabled)
 ```
 
 ### Synology SMB Access
 
 ```bash
 # Linux/Mac
-smb://10.0.1.50/docker
-smb://10.0.1.50/vms
-smb://10.0.1.50/backups
+smb://10.0.1.100/docker
+smb://10.0.1.100/vms
+smb://10.0.1.100/backups
 
 # Windows
-\\10.0.1.50\docker
-\\10.0.1.50\vms
-\\10.0.1.50\backups
+\\10.0.1.100\docker
+\\10.0.1.100\vms
+\\10.0.1.100\backups
 
 # Mount on Linux
-sudo mount -t cifs //10.0.1.50/docker /mnt/docker \
+sudo mount -t cifs //10.0.1.100/docker /mnt/docker \
   -o username=admin,password=PASSWORD,uid=1000,gid=1000
 ```
 
@@ -463,7 +463,7 @@ docker ps
 docker logs container-name
 
 # SSH into Synology (if SSH enabled)
-ssh admin@10.0.1.50
+ssh admin@10.0.1.100
 
 # Check Docker version
 docker --version
@@ -478,13 +478,13 @@ docker --version
 ```bash
 # All of these should SUCCEED ✓
 ping 10.0.1.1              # ER605 gateway
-ping 10.0.1.50             # Synology
+ping 10.0.1.100             # Synology
 ping 10.0.2.1              # Cross-VLAN to Trusted
 ping 10.0.10.1             # Cross-VLAN to IoT
 ping 8.8.8.8               # Internet
 nslookup google.com        # Public DNS
 ssh homelab@10.0.1.108       # VM1 SSH
-http://10.0.1.50:5000      # Synology DSM
+http://10.0.1.100:5000      # Synology DSM
 ```
 
 ### From Trusted VLAN (10.0.2.x)
@@ -497,7 +497,7 @@ nslookup google.com        # Public DNS
 
 # These should FAIL ✗ (blocked by firewall)
 ping 10.0.1.1              # Management gateway - BLOCK
-ping 10.0.1.50             # Synology - BLOCK
+ping 10.0.1.100             # Synology - BLOCK
 ssh homelab@10.0.1.108       # VM1 SSH - BLOCK
 ```
 
@@ -511,7 +511,7 @@ ping 8.8.8.8               # Internet
 # These should FAIL ✗ (blocked by firewall)
 ping 10.0.1.1              # Management - BLOCK
 ping 10.0.2.1              # Trusted - BLOCK
-ping 10.0.1.50             # Synology - BLOCK
+ping 10.0.1.100             # Synology - BLOCK
 ```
 
 ### From Guest VLAN (10.0.99.x)
@@ -576,14 +576,14 @@ ping 10.0.10.0             # Any 10.0.x.x - ALL BLOCKED
 4. Test other SSID on same VLAN (rules out Orbi issue)
 5. Power cycle Orbi
 
-### Issue: Can't access Synology (10.0.1.50:5000)
+### Issue: Can't access Synology (10.0.1.100:5000)
 
 **Causes:** Network not connected, IP conflict, DSM issue
 
 **Fix:**
 1. Verify Synology network light is green
 2. Power cycle Synology (wait 2 minutes for full boot)
-3. Ping 10.0.1.50 (if fails, find IP via Synology Assistant)
+3. Ping 10.0.1.100 (if fails, find IP via Synology Assistant)
 4. Check for IP conflict (arp-scan -l)
 5. Reboot Synology DSM from control panel
 
@@ -675,7 +675,7 @@ ER605 Management:      http://192.168.0.1 (factory default)
                        http://10.0.1.1 (after config)
 Orbi Management:       http://routerlogin.net
                        http://orbi.com
-Synology DSM:          http://10.0.1.50:5000
+Synology DSM:          http://10.0.1.100:5000
 Cloudflare Zero Trust: https://one.dash.cloudflare.com
 Cloudflare DNS:        https://dash.cloudflare.com
 ```
@@ -708,7 +708,7 @@ WIFI LAYER:
 ☐ Isolation working (IoT/Guest blocked)
 
 STORAGE LAYER:
-☐ Synology accessible at 10.0.1.50:5000
+☐ Synology accessible at 10.0.1.100:5000
 ☐ Storage pool: Normal
 ☐ Volume: Ready
 ☐ Daily snapshots running

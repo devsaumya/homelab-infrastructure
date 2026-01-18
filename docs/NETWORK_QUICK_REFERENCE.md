@@ -141,7 +141,7 @@ kubectl get pods --all-namespaces
 
 ### Lost Admin Access to ER605
 1. Connect directly via **Port 5** (Management Spare)
-2. Set static IP on PC: 10.0.1.50/24, Gateway: 10.0.1.1
+2. Set static IP on PC: 10.0.1.100/24, Gateway: 10.0.1.1
 3. Access router: http://10.0.1.1
 4. Alternatively: Factory reset ER605 (hold reset 10sec), restore config backup
 

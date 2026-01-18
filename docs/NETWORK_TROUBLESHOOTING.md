@@ -402,7 +402,7 @@ ipconfig /all    # Look at "Default Gateway"
 
 2. **Direct connection**:
    - Connect PC directly to ER605 Port 5
-   - Set static IP: 10.0.1.50/24, Gateway: 10.0.1.1
+   - Set static IP: 10.0.1.100/24, Gateway: 10.0.1.1
    - Access: http://10.0.1.1
 
 3. **Factory reset** (last resort):

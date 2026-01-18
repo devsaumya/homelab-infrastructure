@@ -179,7 +179,7 @@ Test connectivity:
 ```bash
 ping 10.0.1.108  # k3s-master-01
 ping 10.0.1.109  # VM2
-ping 10.0.1.50   # Synology NAS
+ping 10.0.1.100   # Synology NAS
 ```
 
 ## Cleanup

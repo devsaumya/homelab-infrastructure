@@ -30,7 +30,7 @@ ISP Modem
     | WAN
     v
 TP-LINK ER605 (Gateway 10.0.1.1)
-├─ LAN1(Access) → Synology DS720+ (10.0.1.50, VLAN 1)
+├─ LAN1(Access) → Synology DS720+ (10.0.1.100, VLAN 1)
 ├─ LAN2(Trunk)  → Orbi RBR350 (VLAN 2,10,99 WiFi broadcast)
 ├─ LAN3(Access) → Admin Laptop (VLAN 1)
 └─ LAN4(Access) → Desktop/Future (VLAN 2)
@@ -56,7 +56,7 @@ Cloudflare (connect2home.online) → Tunnel → Traefik LB → Services
 
 ### Static IP Reservations
 
-- Synology DS720+: 10.0.1.50 (VLAN 1)
+- Synology DS720+: 10.0.1.100 (VLAN 1)
 - VM1 k3s-master-01: 10.0.1.108 (VLAN 1)
 - VM2 k3s-worker-01: 10.0.1.109 (VLAN 1)
 - AdGuard DNS: 10.0.1.53 (VLAN 1)
@@ -66,7 +66,7 @@ Cloudflare (connect2home.online) → Tunnel → Traefik LB → Services
 ### Domain Strategy
 
 **Internal (LAN-Only via AdGuard Home):**
-- nas.home.internal → 10.0.1.50
+- nas.home.internal → 10.0.1.100
 - k3s.home.internal → 10.0.1.108
 - vault.home.internal → 10.0.1.109
 - portainer.home.internal → 10.0.1.109
@@ -140,7 +140,7 @@ Navigate to: Settings → Wired Networks → LAN → Port Settings
 Settings → Wired Networks → LAN → DHCP Server → Reservations
 
 Add entries as devices are created:
-- Synology: 10.0.1.50 (MAC from label)
+- Synology: 10.0.1.100 (MAC from label)
 - VM1: 10.0.1.108 (MAC after creation)
 - VM2: 10.0.1.109 (MAC after creation)
 - Others: Add MACs as needed
@@ -274,7 +274,7 @@ Proceed to Synology setup.
 
 ### Step 2: Access Synology
 
-Browser: http://10.0.1.50:5000 (or use Synology Assistant to find IP)
+Browser: http://10.0.1.100:5000 (or use Synology Assistant to find IP)
 
 DSM Setup Wizard:
 - Accept Terms
@@ -302,7 +302,7 @@ Storage Manager → Volume
 
 Control Panel → Network → Network Interface → LAN
 - IPv4: Manual
-- IP: 10.0.1.50
+- IP: 10.0.1.100
 - Netmask: 255.255.255.0
 - Gateway: 10.0.1.1
 - DNS: 1.1.1.1, 8.8.8.8
@@ -329,7 +329,7 @@ All 3 should appear in Shared Folders list.
 
 ### Step 7: Final Verification
 
-- Synology accessible at http://10.0.1.50:5000
+- Synology accessible at http://10.0.1.100:5000
 - Storage status: Normal
 - Time zone: Asia/Kolkata
 - All packages installed
@@ -407,7 +407,7 @@ After deploying AdGuard Home in k3s:
 1. Access AdGuard: http://10.0.1.53:3000
 2. Settings → DNS Settings → Local DNS
 3. Add records:
-   - nas.home.internal → 10.0.1.50
+   - nas.home.internal → 10.0.1.100
    - k3s.home.internal → 10.0.1.108
    - vault.home.internal → 10.0.1.109
    - portainer.home.internal → 10.0.1.109
@@ -419,7 +419,7 @@ Settings → Wired Networks → LAN → VLAN 1 & 2
 - Secondary DNS: 1.1.1.1 (fallback)
 - Apply
 
-Test: `nslookup nas.home.internal` should return 10.0.1.50
+Test: `nslookup nas.home.internal` should return 10.0.1.100
 
 ### External DNS (.connect2home.online)
 
@@ -476,7 +476,7 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 - [ ] ER605 backup saved
 
 ### Synology
-- [ ] Accessible at 10.0.1.50:5000
+- [ ] Accessible at 10.0.1.100:5000
 - [ ] Storage pool: Normal status
 - [ ] Volume: Ready status
 - [ ] Docker installed
@@ -493,7 +493,7 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 
 ### DNS
 - [ ] nslookup google.com → via 10.0.1.53
-- [ ] nslookup nas.home.internal → 10.0.1.50 (after AdGuard)
+- [ ] nslookup nas.home.internal → 10.0.1.100 (after AdGuard)
 - [ ] Guest DNS → public only
 - [ ] External DNS → Cloudflare records active
 
@@ -510,7 +510,7 @@ Verify in Cloudflare DNS tab: connect2home.online zone shows A records.
 
 **Critical IPs:**
 - ER605: 10.0.1.1
-- Synology: 10.0.1.50
+- Synology: 10.0.1.100
 - Orbi: 10.0.1.200
 - VM1: 10.0.1.108
 - VM2: 10.0.1.109

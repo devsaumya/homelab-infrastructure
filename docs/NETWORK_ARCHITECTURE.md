@@ -120,7 +120,7 @@ Internet (ISP)
 | 10.0.1.108 | k3s-master-01 | Kubernetes VM1 | k3s Control Plane |
 | 10.0.1.109 | k3s-worker-01 | VM2 | Monitoring / Security Tools |
 
-**DHCP Range**: 10.0.1.50 - 10.0.1.250 (excludes reserved IPs)
+**DHCP Range**: 10.0.1.100 - 10.0.1.250 (excludes reserved IPs)
 
 #### VLAN 10 (Trusted WiFi) - 10.0.10.0/24
 

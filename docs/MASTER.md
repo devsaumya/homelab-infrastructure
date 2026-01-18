@@ -49,7 +49,7 @@ Managed Switch (VLAN trunk)
     |
     +-- VLAN 1 (Management) - 10.0.1.0/24
     |   +-- k3s-master-01 (10.0.1.108)
-    |   +-- Synology NAS (10.0.1.50)
+    |   +-- Synology NAS (10.0.1.100)
     |   +-- AdGuard Home (10.0.1.53)
     |
     +-- VLAN 2 (Trusted LAN) - 10.0.2.0/24
@@ -125,7 +125,7 @@ See [HARDWARE_SETUP.md](./HARDWARE_SETUP.md) for detailed hardware configuration
 
 - k3s-master-01: 10.0.1.108
 - k3s-worker-01 (VM2): 10.0.1.109
-- Synology NAS: 10.0.1.50
+- Synology NAS: 10.0.1.100
 - AdGuard Home: 10.0.1.53 (via k3s)
 - Traefik: 10.0.1.108 (via k3s)
 
@@ -157,7 +157,7 @@ The infrastructure uses a dual-domain model to separate internal (LAN-only) and 
 - Served by AdGuard Home DNS on LAN
 - Used for services accessible only from local network
 - Examples:
-  - `nas.home.internal` → 10.0.1.50
+  - `nas.home.internal` → 10.0.1.100
   - `k3s.home.internal` → 10.0.1.108
   - `portainer.home.internal` → 10.0.1.108 (via Traefik)
   - `adguard.home.internal` → 10.0.1.53
@@ -185,7 +185,7 @@ The infrastructure uses a dual-domain model to separate internal (LAN-only) and 
    - Navigate to **Settings → DNS settings → DNS rewrites**
    - Add A records:
      ```
-     nas.home.internal          → 10.0.1.50
+     nas.home.internal          → 10.0.1.100
      k3s.home.internal          → 10.0.1.108
      adguard.home.internal      → 10.0.1.53
      traefik.home.internal      → 10.0.1.108

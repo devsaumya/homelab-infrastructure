@@ -22,7 +22,7 @@ Complete guide for setting up and configuring all hardware components in the hom
 | Component | Model/Specs | Purpose | IP Address |
 |-----------|------------|---------|------------|
 | **Router** | TP-Link ER605 | Edge router, VLAN management, firewall | 10.0.1.1 |
-| **NAS** | Synology (varies) | Centralized storage, NFS/SMB shares | 10.0.1.50 |
+| **NAS** | Synology (varies) | Centralized storage, NFS/SMB shares | 10.0.1.100 |
 | **VM Host** | Varies (Proxmox/ESXi/etc) | Virtualization host | - |
 | **k3s-master-01** | 2 CPU, 4GB RAM, 40GB disk | Kubernetes control plane | 10.0.1.108 |
 | **k3s-worker-01** | 2 CPU, 4GB RAM, 40GB disk | Docker services, monitoring | 10.0.1.109 |
@@ -156,19 +156,19 @@ Navigate to **Security → Firewall → ACL Rules**:
 
 1. **Management → Synology**: Allow SMB3 (TCP 445) with encryption
    - Source: 10.0.1.0/24
-   - Destination: 10.0.1.50
+   - Destination: 10.0.1.100
    - Service: TCP 445
    - Action: Allow
 
 2. **Trusted LAN → Synology**: Allow SMB3 (read-only)
    - Source: 10.0.2.0/24
-   - Destination: 10.0.1.50
+   - Destination: 10.0.1.100
    - Service: TCP 445
    - Action: Allow
 
 3. **IoT → Synology**: Deny all
    - Source: 10.0.10.0/24
-   - Destination: 10.0.1.50
+   - Destination: 10.0.1.100
    - Service: Any
    - Action: Deny
 
@@ -209,7 +209,7 @@ The Synology NAS provides centralized storage for the homelab, including NFS/SMB
 #### 2. Configure Network
 
 1. Navigate to **Control Panel → Network → Network Interface**
-2. Set static IP: `10.0.1.50`
+2. Set static IP: `10.0.1.100`
 3. Subnet mask: `255.255.255.0`
 4. Gateway: `10.0.1.1`
 5. DNS servers:
@@ -426,13 +426,13 @@ If using VLAN-capable access points:
 ```bash
 # From k3s-master-01 (10.0.1.108)
 ping 10.0.1.1      # Gateway
-ping 10.0.1.50     # Synology NAS
+ping 10.0.1.100     # Synology NAS
 ping 10.0.1.109    # k3s-worker-01 VM
 ping 8.8.8.8       # Internet
 
 # From k3s-worker-01 (10.0.1.109)
 ping 10.0.1.1      # Gateway
-ping 10.0.1.50     # Synology NAS
+ping 10.0.1.100     # Synology NAS
 ping 10.0.1.108    # k3s-master-01
 ping 8.8.8.8       # Internet
 ```
@@ -465,7 +465,7 @@ After hardware setup is complete:
 
 **Cannot access Synology:**
 - Check network connectivity
-- Verify IP address (10.0.1.50)
+- Verify IP address (10.0.1.100)
 - Check firewall rules on ER605
 - Access via Synology Assistant if needed
 

@@ -46,7 +46,7 @@ Goal:
 
 3. **DHCP reservations (optional but recommended)**  
    - Reserve IPs in VLAN1:  
-     - Synology: 10.0.1.50  
+     - Synology: 10.0.1.100  
      - k3s VM: 10.0.1.108  
      - security‑ops VM: 10.0.1.109  
      - **Orbi: 10.0.1.200** (use Orbi MAC from status page). [file:121][file:122]

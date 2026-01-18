@@ -61,7 +61,7 @@ INTERNET (ISP)
    │        │            └─ VLAN 99: Guest WiFi
    │        └─→ Admin Laptop
    │
-   └─→ Synology DS720+ (10.0.1.50)
+   └─→ Synology DS720+ (10.0.1.100)
        ├─ Docker Services
        ├─ VMs (k3s, k3s-worker-01)
        ├─ Storage Pool (Btrfs)
@@ -92,7 +92,7 @@ Tunnel → Traefik → Services
 ```
 Management VLAN (10.0.1.0/24):
 ├─ Gateway: 10.0.1.1 (ER605)
-├─ Synology: 10.0.1.50
+├─ Synology: 10.0.1.100
 ├─ VM1 k3s-master-01: 10.0.1.108
 ├─ VM2 k3s-worker-01: 10.0.1.109
 ├─ AdGuard DNS: 10.0.1.53
@@ -393,7 +393,7 @@ Add these now (MAC addresses to be filled later):
 
 ```
 Device: Synology
-IP: 10.0.1.50
+IP: 10.0.1.100
 MAC: [Get from device label - add after network boot]
 VLAN: 1
 Save
@@ -774,7 +774,7 @@ Control Panel → Network → Network Interface → LAN
 1. Click: **Edit**
 2. IPv4 Settings:
    - Method: **Manual**
-   - IP Address: **10.0.1.50**
+   - IP Address: **10.0.1.100**
    - Netmask: **255.255.255.0**
    - Gateway: **10.0.1.1** (ER605)
    - DNS 1: **1.1.1.1**
@@ -788,7 +788,7 @@ Control Panel → Network → Network Interface → LAN
 Control Panel → Network → Network Interface → Summary
 ```
 LAN:
-├─ IP Address: 10.0.1.50 ✓
+├─ IP Address: 10.0.1.100 ✓
 ├─ Gateway: 10.0.1.1 ✓
 └─ Status: Connected ✓
 ```
@@ -886,8 +886,8 @@ Folders:
 
 Access via SMB from laptop:
 ```bash
-# Windows: \\10.0.1.50\docker
-# Mac/Linux: smb://10.0.1.50/docker
+# Windows: \\10.0.1.100\docker
+# Mac/Linux: smb://10.0.1.100/docker
 # Should connect with admin credentials
 ```
 
@@ -896,8 +896,8 @@ Access via SMB from laptop:
 ### Step 3.7: Final Synology Verification
 
 Checklist:
-- [ ] DSM accessible at http://10.0.1.50:5000
-- [ ] Static IP: 10.0.1.50
+- [ ] DSM accessible at http://10.0.1.100:5000
+- [ ] Static IP: 10.0.1.100
 - [ ] Storage pool: Normal status
 - [ ] Volume1: Ready status
 - [ ] Docker installed
@@ -1036,7 +1036,7 @@ Save
 Subdomain: nas
 Domain: connect2home.online
 Protocol: HTTP (or HTTPS if available)
-URL: 10.0.1.50:5000
+URL: 10.0.1.100:5000
 Save
 ```
 
@@ -1088,7 +1088,7 @@ Browser: http://10.0.1.53:3000
 2. Add records:
 
 ```
-nas.home.internal           → 10.0.1.50
+nas.home.internal           → 10.0.1.100
 k3s.home.internal           → 10.0.1.108
 vault.home.internal         → 10.0.1.109
 portainer.home.internal     → 10.0.1.109
@@ -1121,7 +1121,7 @@ Apply
 From laptop on VLAN 1:
 ```bash
 nslookup nas.home.internal
-# Expected: 10.0.1.50
+# Expected: 10.0.1.100
 
 nslookup google.com
 # Expected: Resolved via 10.0.1.53
@@ -1193,8 +1193,8 @@ Lease time: 1 hour (auto-disconnect)
 - [ ] Devices on Orbi-Guest blocked from all internal
 
 ### Synology Layer
-- [ ] DSM accessible at 10.0.1.50:5000
-- [ ] Static IP 10.0.1.50 confirmed
+- [ ] DSM accessible at 10.0.1.100:5000
+- [ ] Static IP 10.0.1.100 confirmed
 - [ ] Storage pool shows "Normal" status
 - [ ] Volume1 shows "Ready" status
 - [ ] All 3 packages installed (Docker, VMM, Snapshot)
@@ -1209,7 +1209,7 @@ Lease time: 1 hour (auto-disconnect)
 
 ### DNS Layer
 - [ ] `nslookup google.com` resolves
-- [ ] `nslookup nas.home.internal` returns 10.0.1.50
+- [ ] `nslookup nas.home.internal` returns 10.0.1.100
 - [ ] Guest WiFi DNS: public only (1.1.1.1)
 - [ ] Management DNS: includes AdGuard (10.0.1.53)
 
@@ -1237,7 +1237,7 @@ Lease time: 1 hour (auto-disconnect)
 
 ### Synology Issues
 
-**Problem: Can't access http://10.0.1.50:5000**
+**Problem: Can't access http://10.0.1.100:5000**
 - Solution: Check network cable connection
 - Verify: Synology has network activity light
 - Find IP: Use Synology Assistant (download from Synology site)

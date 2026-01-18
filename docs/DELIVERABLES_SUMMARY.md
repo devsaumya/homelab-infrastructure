@@ -147,7 +147,7 @@ I've created a **professional-grade, production-ready homelab setup guide** spec
 ✅ DSM initial setup and configuration
 ✅ Btrfs storage pool with data protection
 ✅ Daily snapshot backups (7-day retention at 2:00 AM)
-✅ Static IP configuration (10.0.1.50)
+✅ Static IP configuration (10.0.1.100)
 ✅ Docker installation and setup
 ✅ Virtual Machine Manager installation
 ✅ 3 shared folders (docker, vms, backups)
@@ -161,7 +161,7 @@ I've created a **professional-grade, production-ready homelab setup guide** spec
   - vault.connect2home.online → 10.0.1.109:8080
   - prometheus.connect2home.online → 10.0.1.109:9090
   - home.connect2home.online → 10.0.1.80:9000
-  - nas.connect2home.online → 10.0.1.50:5000
+  - nas.connect2home.online → 10.0.1.100:5000
 ✅ Zero Trust access policies
 ✅ WARP client integration for secure external access
 ✅ DNS propagation verification steps
