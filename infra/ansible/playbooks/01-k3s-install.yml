@@ -7,7 +7,7 @@
   become: true
   roles:
     - common
-    - k3s-master-01
+    - k3s-master
 
 # =====================================
 # Install K3s Agent (Security Node)
