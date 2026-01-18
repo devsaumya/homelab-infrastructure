@@ -24,8 +24,8 @@ Complete guide for setting up and configuring all hardware components in the hom
 | **Router** | TP-Link ER605 | Edge router, VLAN management, firewall | 10.0.1.1 |
 | **NAS** | Synology (varies) | Centralized storage, NFS/SMB shares | 10.0.1.50 |
 | **VM Host** | Varies (Proxmox/ESXi/etc) | Virtualization host | - |
-| **k3s-master** | 2 CPU, 4GB RAM, 40GB disk | Kubernetes control plane | 10.0.1.108 |
-| **security-ops** | 2 CPU, 4GB RAM, 40GB disk | Docker services, monitoring | 10.0.1.109 |
+| **k3s-master-01** | 2 CPU, 4GB RAM, 40GB disk | Kubernetes control plane | 10.0.1.108 |
+| **k3s-worker-01** | 2 CPU, 4GB RAM, 40GB disk | Docker services, monitoring | 10.0.1.109 |
 | **Managed Switch** | VLAN-capable | Network switching, VLAN trunking | - |
 
 ### Optional Hardware
@@ -293,7 +293,7 @@ Navigate to **Control Panel → Shared Folder** and create:
 - **Storage**: SSD recommended for VMs
 - **Network**: Support for VLAN tagging
 
-### k3s-master VM
+### k3s-master-01 VM
 
 #### Specifications
 - **OS**: Ubuntu 22.04 LTS
@@ -340,7 +340,7 @@ Navigate to **Control Panel → Shared Folder** and create:
    ping 8.8.8.8
    ```
 
-### security-ops VM (VM2)
+### k3s-worker-01 VM (VM2)
 
 #### Specifications
 - **OS**: Ubuntu 22.04 LTS
@@ -354,8 +354,8 @@ Navigate to **Control Panel → Shared Folder** and create:
 #### Installation Steps
 
 1. **Create VM** in virtualization platform
-2. **Install Ubuntu 22.04 LTS** (same as k3s-master)
-3. **Configure Network** (same as k3s-master, use IP 10.0.1.109)
+2. **Install Ubuntu 22.04 LTS** (same as k3s-master-01)
+3. **Configure Network** (same as k3s-master-01, use IP 10.0.1.109)
 4. **Verify connectivity**
 
 ---
@@ -377,8 +377,8 @@ Navigate to **Control Panel → Shared Folder** and create:
 #### Port Assignment
 
 - **Port 1**: Trunk to ER605 (all VLANs tagged)
-- **Port 2**: k3s-master (VLAN 1, untagged)
-- **Port 3**: security-ops (VLAN 1, untagged)
+- **Port 2**: k3s-master-01 (VLAN 1, untagged)
+- **Port 3**: k3s-worker-01 (VLAN 1, untagged)
 - **Port 4**: Synology NAS (VLAN 1, untagged)
 - **Port 5-8**: Available for other devices
 
@@ -424,16 +424,16 @@ If using VLAN-capable access points:
 ### Testing Network Connectivity
 
 ```bash
-# From k3s-master (10.0.1.108)
+# From k3s-master-01 (10.0.1.108)
 ping 10.0.1.1      # Gateway
 ping 10.0.1.50     # Synology NAS
-ping 10.0.1.109    # security-ops VM
+ping 10.0.1.109    # k3s-worker-01 VM
 ping 8.8.8.8       # Internet
 
-# From security-ops (10.0.1.109)
+# From k3s-worker-01 (10.0.1.109)
 ping 10.0.1.1      # Gateway
 ping 10.0.1.50     # Synology NAS
-ping 10.0.1.108    # k3s-master
+ping 10.0.1.108    # k3s-master-01
 ping 8.8.8.8       # Internet
 ```
 

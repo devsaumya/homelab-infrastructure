@@ -48,7 +48,7 @@ TP-Link ER605 (WAN/Firewall edge)
 Managed Switch (VLAN trunk)
     |
     +-- VLAN 1 (Management) - 10.0.1.0/24
-    |   +-- k3s-master (10.0.1.108)
+    |   +-- k3s-master-01 (10.0.1.108)
     |   +-- Synology NAS (10.0.1.50)
     |   +-- AdGuard Home (10.0.1.53)
     |
@@ -103,8 +103,8 @@ See [HARDWARE_SETUP.md](./HARDWARE_SETUP.md) for detailed hardware configuration
 
 ### Quick Hardware Reference
 
-- **k3s-master**: 2 CPU, 4GB RAM, 40GB disk
-- **security-ops (VM2)**: 2 CPU, 4GB RAM, 40GB disk
+- **k3s-master-01**: 2 CPU, 4GB RAM, 40GB disk
+- **k3s-worker-01 (VM2)**: 2 CPU, 4GB RAM, 40GB disk
 - **Synology NAS**: Existing storage device
 - **TP-Link ER605**: Router with VLAN support
 - **Managed Switch**: VLAN trunk support
@@ -123,8 +123,8 @@ See [HARDWARE_SETUP.md](./HARDWARE_SETUP.md) for detailed hardware configuration
 
 ### Key IPs
 
-- k3s-master: 10.0.1.108
-- security-ops (VM2): 10.0.1.109
+- k3s-master-01: 10.0.1.108
+- k3s-worker-01 (VM2): 10.0.1.109
 - Synology NAS: 10.0.1.50
 - AdGuard Home: 10.0.1.53 (via k3s)
 - Traefik: 10.0.1.108 (via k3s)
@@ -220,7 +220,7 @@ git --version
 #### Network Information
 
 Gather the following information:
-- IP addresses of your VMs (k3s-master, security-ops)
+- IP addresses of your VMs (k3s-master-01, k3s-worker-01)
 - SSH credentials for VMs (username, password or SSH key)
 - Cloudflare account credentials (API token, Zone ID, Account ID)
 - Domain configuration (internal: `home.internal`, public: `connect2home.online`)
@@ -237,11 +237,11 @@ cd homelab-infrastructure
 Edit `infra/ansible/inventory/hosts.yml`:
 
 ```yaml
-k3s-master:
+k3s-master-01:
   ansible_host: 10.0.1.108  # Your k3s master IP
   ansible_user: homelab
 
-security-ops:
+k3s-worker-01:
   ansible_host: 10.0.1.109  # Your VM2 IP
   ansible_user: homelab
 ```

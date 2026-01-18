@@ -63,7 +63,7 @@ INTERNET (ISP)
    │
    └─→ Synology DS720+ (10.0.1.50)
        ├─ Docker Services
-       ├─ VMs (k3s, security-ops)
+       ├─ VMs (k3s, k3s-worker-01)
        ├─ Storage Pool (Btrfs)
        └─ Daily Snapshots
 
@@ -93,8 +93,8 @@ Tunnel → Traefik → Services
 Management VLAN (10.0.1.0/24):
 ├─ Gateway: 10.0.1.1 (ER605)
 ├─ Synology: 10.0.1.50
-├─ VM1 k3s-master: 10.0.1.108
-├─ VM2 security-ops: 10.0.1.109
+├─ VM1 k3s-master-01: 10.0.1.108
+├─ VM2 k3s-worker-01: 10.0.1.109
 ├─ AdGuard DNS: 10.0.1.53
 ├─ Traefik LB: 10.0.1.80
 └─ Orbi: 10.0.1.200
@@ -398,13 +398,13 @@ MAC: [Get from device label - add after network boot]
 VLAN: 1
 Save
 
-Device: VM1 k3s-master
+Device: VM1 k3s-master-01
 IP: 10.0.1.108
 MAC: [Add after VM creation]
 VLAN: 1
 Save
 
-Device: VM2 security-ops
+Device: VM2 k3s-worker-01
 IP: 10.0.1.109
 MAC: [Add after VM creation]
 VLAN: 1

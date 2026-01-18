@@ -90,9 +90,9 @@ See [NETWORK_ARCHITECTURE.md](./NETWORK_ARCHITECTURE.md) for comprehensive netwo
 
 ### Key Components
 
-- **k3s-master**: 10.0.1.108
-- **security-ops (VM2)**: 10.0.1.109
-- **Synology NAS**: 10.0.1.50
+- **k3s-master-01**: 10.0.1.108
+- **k3s-worker-01 (VM2)**: 10.0.1.109
+- **Synology NAS**: 10.0.1.100
 - **AdGuard Home**: 10.0.1.53 (via k3s)
 
 ### Domains

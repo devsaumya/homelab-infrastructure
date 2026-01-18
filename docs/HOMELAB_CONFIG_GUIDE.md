@@ -57,8 +57,8 @@ Cloudflare (connect2home.online) → Tunnel → Traefik LB → Services
 ### Static IP Reservations
 
 - Synology DS720+: 10.0.1.50 (VLAN 1)
-- VM1 k3s-master: 10.0.1.108 (VLAN 1)
-- VM2 security-ops: 10.0.1.109 (VLAN 1)
+- VM1 k3s-master-01: 10.0.1.108 (VLAN 1)
+- VM2 k3s-worker-01: 10.0.1.109 (VLAN 1)
 - AdGuard DNS: 10.0.1.53 (VLAN 1)
 - Traefik LB: 10.0.1.80 (VLAN 1)
 - Orbi RBR350: 10.0.1.200 (VLAN 1)

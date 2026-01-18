@@ -25,7 +25,7 @@ echo ""
 
 # Check Docker services
 echo "Checking Docker services on monitoring host..."
-ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-worker-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'" \
   --become || echo "✗ Cannot check Docker services"
 

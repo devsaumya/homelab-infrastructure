@@ -28,23 +28,28 @@ networks:
 reservations:
   synology:
     hostname: nas.home.internal
-    ip: 10.0.1.50
+    ip: 10.0.1.100
     vlan: vlan1_management
     mac: TBD
   k3s_master:
-    hostname: k3s-master.home.internal
+    hostname: k3s-master-01.home.internal
     ip: 10.0.1.108
     vlan: vlan1_management
     mac: TBD
   security_ops:
-    hostname: security-ops.home.internal
+    hostname: k3s-worker-01.home.internal
     ip: 10.0.1.109
     vlan: vlan1_management
     mac: TBD
-  orbi_ap:
-    hostname: orbi-ap.home.internal
-    ip: 10.0.1.200
-    vlan: vlan1_management
+  orbi_rbr:
+    hostname: orbi-rbr.home.internal
+    ip: 10.0.10.100
+    vlan: vlan10_iot
+    mac: TBD
+  orbi_rbs:
+    hostname: orbi-rbs.home.internal
+    ip: 10.0.10.101
+    vlan: vlan10_iot
     mac: TBD
   adguard:
     hostname: adguard.home.internal

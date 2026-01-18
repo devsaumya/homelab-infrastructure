@@ -28,10 +28,10 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_rsa -N "" -C "ansible@homelab"
 #### Step 2: Copy Public Key to VMs
 
 ```bash
-# Copy to k3s-master
+# Copy to k3s-master-01
 ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.108
 
-# Copy to security-ops
+# Copy to k3s-worker-01
 ssh-copy-id -i ~/.ssh/id_rsa.pub homelab@10.0.1.109
 ```
 
@@ -40,10 +40,10 @@ You'll be prompted for the password on each VM during this step.
 #### Step 3: Test Connection
 
 ```bash
-# Test k3s-master
+# Test k3s-master-01
 ssh homelab@10.0.1.108 "echo 'Connection successful'"
 
-# Test security-ops
+# Test k3s-worker-01
 ssh homelab@10.0.1.109 "echo 'Connection successful'"
 ```
 
@@ -60,11 +60,11 @@ ansible all -i inventory/hosts.yml -m ping
 
 Expected output:
 ```
-k3s-master | SUCCESS => {
+k3s-master-01 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
-security-ops | SUCCESS => {
+k3s-worker-01 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
@@ -118,7 +118,7 @@ If your SSH key is in a different location:
 
 2. **Or set per-host:**
    ```yaml
-   k3s-master:
+   k3s-master-01:
      ansible_ssh_private_key_file: /path/to/your/key
    ```
 

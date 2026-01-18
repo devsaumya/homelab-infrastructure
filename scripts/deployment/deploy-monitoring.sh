@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# Deploy monitoring stack on VM2 (security-ops)
+# Deploy monitoring stack on VM2 (k3s-worker-01)
 
 echo "=== Deploying Monitoring Stack ==="
 
@@ -14,11 +14,11 @@ cd "$PROJECT_ROOT"
 ansible-playbook \
   -i infra/ansible/inventory/hosts.yml \
   infra/ansible/playbooks/02-monitoring.yml \
-  --limit security-ops
+  --limit k3s-worker-01
 
 # Deploy Docker Compose stack
 echo "Deploying Docker Compose monitoring stack..."
-ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-worker-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/monitoring && docker compose up -d" \
   --become
 

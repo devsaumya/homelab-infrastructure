@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  omada-controller:
+    image: mbentley/omada-controller:latest
+    container_name: omada_controller
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - MANAGE_HTTP_PORT=${HTTP_PORT}
+      - MANAGE_HTTPS_PORT=${HTTPS_PORT}
+      - PORT_ADOPT_V1=${PORT_ADOPT_V1}
+      - PORT_UPGRADE_V1=${PORT_UPGRADE_V1}
+      - PORT_MANAGER_V1=${PORT_MANAGER_V1}
+      - PORT_MANAGER_V2=${PORT_MANAGER_V2}
+      - PORT_DISCOVERY=${PORT_DISCOVERY}
+      - TZ=Etc/UTC
+    volumes:
+      - ./data:/opt/tplink/efs/data
+      - ./logs:/opt/tplink/efs/logs
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${HTTP_PORT}/health" ]
+      interval: 1m
+      timeout: 10s
+      retries: 3

@@ -177,7 +177,7 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server -f
 
 Test connectivity:
 ```bash
-ping 10.0.1.108  # k3s-master
+ping 10.0.1.108  # k3s-master-01
 ping 10.0.1.109  # VM2
 ping 10.0.1.50   # Synology NAS
 ```
@@ -200,7 +200,7 @@ This removes:
 
 Backup k3s data:
 ```bash
-ansible k3s-master -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-master-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "sudo tar -czf /tmp/k3s-backup-$(date +%Y%m%d).tar.gz /var/lib/rancher/k3s" \
   --become
 ```

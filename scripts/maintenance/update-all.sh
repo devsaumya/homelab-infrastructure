@@ -19,15 +19,15 @@ ansible-playbook \
 
 # Update Docker images
 echo "Updating Docker images on monitoring host..."
-ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-worker-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/monitoring && docker compose pull && docker compose up -d" \
   --become
 
-ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-worker-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/security && docker compose pull && docker compose up -d" \
   --become
 
-ansible security-ops -i infra/ansible/inventory/hosts.yml -m shell -a \
+ansible k3s-worker-01 -i infra/ansible/inventory/hosts.yml -m shell -a \
   "cd /opt/docker/services && docker compose pull && docker compose up -d" \
   --become
 

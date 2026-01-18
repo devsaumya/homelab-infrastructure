@@ -5,17 +5,16 @@
       "type": "authoritative",
       "records": [
         {
-          "name": "nas",
-          "type": "A",
-          "value": "10.0.1.50"
+          "name": "nas.home.internal",
+          "value": "10.0.1.100"
         },
         {
-          "name": "k3s-master",
+          "name": "k3s-master-01",
           "type": "A",
           "value": "10.0.1.108"
         },
         {
-          "name": "security-ops",
+          "name": "k3s-worker-01",
           "type": "A",
           "value": "10.0.1.109"
         },

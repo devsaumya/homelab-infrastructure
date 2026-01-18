@@ -1,7 +1,7 @@
 ---
 # Monitoring stack deployment on VM2
 - name: Deploy monitoring stack
-  hosts: security-ops
+  hosts: k3s-worker-01
   become: true
   roles:
     - common

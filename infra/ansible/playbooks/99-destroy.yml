@@ -27,5 +27,5 @@
         - /opt/docker/monitoring
         - /opt/docker/security
         - /opt/docker/services
-      when: "'security-ops' in inventory_hostname or 'security-ops' in group_names"
+      when: "'k3s-worker-01' in inventory_hostname or 'k3s-worker-01' in group_names"
       ignore_errors: true

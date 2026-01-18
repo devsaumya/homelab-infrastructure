@@ -23,8 +23,8 @@ One-page cheat sheet for the homelab network architecture. Keep this handy for q
 | 10.0.1.53 | AdGuard Home | DNS Server |
 | 10.0.1.100 | Synology DS720+ | NAS/VM Host |
 | 10.0.1.105 | Admin PC | Workstation |
-| 10.0.1.108 | k3s-master | Kubernetes VM |
-| 10.0.1.109 | security-ops | Monitoring VM |
+| 10.0.1.108 | k3s-master-01 | Kubernetes VM |
+| 10.0.1.109 | k3s-worker-01 | Monitoring VM |
 
 ### VLAN 10 (Trusted WiFi)
 | IP | Device | Purpose |

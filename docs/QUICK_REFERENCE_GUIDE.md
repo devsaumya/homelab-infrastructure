@@ -20,8 +20,8 @@ GATEWAY & CORE:
 └─ UPS Backup Power: Local only (no IP)
 
 SERVICES (VLAN 1 - Management):
-├─ VM1 k3s-master: 10.0.1.108
-├─ VM2 security-ops: 10.0.1.109
+├─ VM1 k3s-master-01: 10.0.1.108
+├─ VM2 k3s-worker-01: 10.0.1.109
 ├─ AdGuard DNS: 10.0.1.53 (port 3000)
 ├─ Traefik LoadBalancer: 10.0.1.80 (port 9000)
 └─ Prometheus: 10.0.1.109 (port 9090)

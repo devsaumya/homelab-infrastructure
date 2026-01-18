@@ -432,7 +432,7 @@ kubectl logs -n dns-system deployment/adguard-home
 
 | Issue | Fix |
 |-------|-----|
-| **k3s down** | SSH to k3s-master → `sudo systemctl status k3s` → restart if needed |
+| **k3s down** | SSH to k3s-master-01 → `sudo systemctl status k3s` → restart if needed |
 | **Pod not running** | `kubectl describe pod <pod-name> -n <namespace>` → check events |
 | **Service not exposed** | Check Service type (LoadBalancer, ClusterIP) and external IP |
 | **Firewall blocking** | Verify Management VLAN can access k3s API (port 6443) |
