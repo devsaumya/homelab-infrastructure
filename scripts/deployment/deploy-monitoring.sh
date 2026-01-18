@@ -10,6 +10,10 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 cd "$PROJECT_ROOT"
 
+# Set Ansible configuration
+export ANSIBLE_CONFIG="${PROJECT_ROOT}/infra/ansible/ansible.cfg"
+export ANSIBLE_ROLES_PATH="${PROJECT_ROOT}/infra/ansible/roles"
+
 # Run Ansible playbook for monitoring
 ansible-playbook \
   -i infra/ansible/inventory/hosts.yml \

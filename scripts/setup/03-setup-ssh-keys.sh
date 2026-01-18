@@ -21,7 +21,7 @@ if [ ! -f "$SSH_KEY_EXPANDED" ]; then
     read -p "Generate new SSH key? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        ssh-keygen -t ed25519 -f "$SSH_KEY_EXPANDED" -N "" -C "ansible@homelab"
+        ssh-keygen -t ed25519 -f "$SSH_KEY_EXPANDED" -N "" -C "ansible@homelabadmin"
         echo "✓ SSH key generated at $SSH_KEY"
     else
         echo "Please generate an SSH key or specify path with SSH_KEY environment variable"
@@ -45,8 +45,8 @@ echo ""
 
 # VMs to configure
 VMS=(
-    "homelab@10.0.1.108:k3s-master-01"
-    "homelab@10.0.1.109:k3s-worker-01"
+    "homelabadmin@10.0.1.108:k3s-master-01"
+    "homelabadmin@10.0.1.109:k3s-worker-01"
 )
 
 echo "Copying SSH key to VMs..."
