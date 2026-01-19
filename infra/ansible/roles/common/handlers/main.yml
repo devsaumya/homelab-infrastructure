@@ -1,11 +1,9 @@
----
 # roles/common/handlers/main.yml
 
-- name: restart cron
-  service:
+- name: Restart cron
+  ansible.builtin.service:
     name: cron
     state: restarted
   when:
     - ansible_os_family == "Debian"
     - "'cron' in ansible_facts.services"
-  ignore_errors: yes

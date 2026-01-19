@@ -1,15 +1,14 @@
----
 # roles/common/tasks/main.yml
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
   when:
     - ansible_os_family == "Debian"
 
 - name: Install base packages
-  apt:
+  ansible.builtin.apt:
     name:
       - curl
       - vim
@@ -23,18 +22,19 @@
     - ansible_os_family == "Debian"
 
 - name: Set timezone
-  timezone:
+  community.general.timezone:
     name: "{{ timezone }}"
   when:
     - ansible_os_family == "Debian"
 
 - name: Disable swap
-  command: swapoff -a
+  ansible.builtin.command: swapoff -a
+  changed_when: false
   when:
     - ansible_os_family == "Debian"
 
 - name: Comment out swap in /etc/fstab
-  replace:
+  ansible.builtin.replace:
     path: /etc/fstab
     regexp: '^([^#].*swap.*)$'
     replace: '# \1'
@@ -43,7 +43,7 @@
 
 # Load kernel modules BEFORE sysctl configuration
 - name: Load required kernel modules
-  modprobe:
+  community.general.modprobe:
     name: "{{ item }}"
     state: present
   loop:
@@ -53,7 +53,7 @@
     - ansible_os_family == "Debian"
 
 - name: Make kernel modules persistent
-  copy:
+  ansible.builtin.copy:
     dest: /etc/modules-load.d/k8s.conf
     content: |
       overlay
@@ -64,7 +64,7 @@
 
 # Now sysctl settings will work since br_netfilter is loaded
 - name: Configure sysctl for Kubernetes
-  sysctl:
+  ansible.posix.sysctl:
     name: "{{ item.key }}"
     value: "{{ item.value }}"
     state: present

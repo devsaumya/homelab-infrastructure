@@ -1,7 +1,6 @@
----
 # Handlers for security-scanning role
 
-- name: restart fail2ban
-  systemd:
+- name: Restart fail2ban
+  ansible.builtin.systemd:
     name: fail2ban
     state: restarted

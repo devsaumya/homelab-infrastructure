@@ -1,8 +1,7 @@
----
 # Grafana installation preparation
 
 - name: Create Grafana directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: '0755'
@@ -11,5 +10,5 @@
     - /data/grafana
 
 - name: Set Grafana admin password
-  set_fact:
+  ansible.builtin.set_fact:
     grafana_admin_password: "{{ vault_grafana_admin_password | default('admin') }}"

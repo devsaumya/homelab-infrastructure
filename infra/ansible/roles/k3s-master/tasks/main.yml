@@ -1,20 +1,19 @@
----
 # k3s master installation
 
 - name: Ensure k3s config directory exists
-  file:
+  ansible.builtin.file:
     path: /etc/rancher/k3s
     state: directory
     mode: '0755'
 
 - name: Download k3s install script
-  get_url:
+  ansible.builtin.get_url:
     url: https://get.k3s.io
     dest: /tmp/install-k3s.sh
     mode: '0755'
 
 - name: Install k3s server
-  shell: |
+  ansible.builtin.shell: |
     export K3S_TOKEN="{{ vault_k3s_token }}"
     export INSTALL_K3S_EXEC="server --disable traefik --disable servicelb --cluster-init --flannel-backend=none"
     /tmp/install-k3s.sh
@@ -22,18 +21,18 @@
     creates: /usr/local/bin/k3s
 
 - name: Enable and start k3s service
-  systemd:
+  ansible.builtin.systemd:
     name: k3s
     enabled: true
     state: started
 
 - name: Wait for kubeconfig to exist
-  wait_for:
+  ansible.builtin.wait_for:
     path: /etc/rancher/k3s/k3s.yaml
     timeout: 300
 
 - name: Ensure .kube directory exists for homelab user
-  file:
+  ansible.builtin.file:
     path: "/home/{{ ansible_user }}/.kube"
     state: directory
     owner: "{{ ansible_user }}"
@@ -41,7 +40,7 @@
     mode: '0755'
 
 - name: Copy kubeconfig for homelab user
-  copy:
+  ansible.builtin.copy:
     src: /etc/rancher/k3s/k3s.yaml
     dest: "/home/{{ ansible_user }}/.kube/config"
     owner: "{{ ansible_user }}"
@@ -52,12 +51,12 @@
 # ---- kubectl install (FIXED URL) ----
 
 - name: Check if kubectl is already installed
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/bin/kubectl
   register: kubectl_stat
 
 - name: Download kubectl binary
-  get_url:
+  ansible.builtin.get_url:
     url: "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
     dest: /usr/local/bin/kubectl
     mode: '0755'

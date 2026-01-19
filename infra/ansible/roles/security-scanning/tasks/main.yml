@@ -1,25 +1,40 @@
----
 # Security scanning tools installation
 
+- name: Add Trivy GPG key
+  ansible.builtin.get_url:
+    url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+    dest: /usr/share/keyrings/trivy.gpg
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+
+- name: Add Trivy repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_distribution_release }} main"
+    state: present
+    filename: trivy
+  when: ansible_os_family == "Debian"
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
 - name: Install Trivy
-  shell: |
-    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
-    echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) master" | tee -a /etc/apt/sources.list.d/trivy.list
-    apt-get update
-    apt-get install -y trivy
-  args:
-    creates: /usr/local/bin/trivy
+  ansible.builtin.apt:
+    name: trivy
+    state: present
   when: ansible_os_family == "Debian"
 
 - name: Install fail2ban
-  apt:
+  ansible.builtin.apt:
     name: fail2ban
     state: present
   when: ansible_os_family == "Debian"
-  notify: restart fail2ban
+  notify: Restart fail2ban
 
 - name: Configure fail2ban
-  template:
+  ansible.builtin.template:
     src: jail.local.j2
     dest: /etc/fail2ban/jail.local
-  notify: restart fail2ban
+    mode: '0644'
+  notify: Restart fail2ban

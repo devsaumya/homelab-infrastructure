@@ -8,19 +8,19 @@
   gather_facts: false
   tasks:
     - name: Confirm destruction
-      pause:
+      ansible.builtin.pause:
         prompt: "WARNING: This will destroy infrastructure. Type 'yes' to continue"
       register: confirmation
       when: destroy_confirmation != "yes"
     
     - name: Remove k3s
-      shell: |
+      ansible.builtin.shell: |
         /usr/local/bin/k3s-uninstall.sh
       when: "'k3s' in group_names"
       ignore_errors: true
     
     - name: Stop Docker containers
-      docker_compose:
+      community.docker.docker_compose_v2:
         project_src: "{{ item }}"
         state: absent
       loop:

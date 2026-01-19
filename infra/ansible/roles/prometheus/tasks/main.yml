@@ -1,9 +1,8 @@
----
 # Prometheus installation (via Docker Compose)
 # This role prepares the environment; actual deployment is via docker-compose
 
 - name: Create Prometheus directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: '0755'
@@ -12,7 +11,7 @@
     - /data/prometheus
 
 - name: Ensure Prometheus user exists
-  user:
+  ansible.builtin.user:
     name: prometheus
     system: true
     shell: /bin/false
