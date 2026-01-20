@@ -36,9 +36,7 @@ spec:
         - --providers.kubernetesingress=true
         - --entrypoints.web.address=:80
         - --entrypoints.websecure.address=:443
-        - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
-        - --certificatesresolvers.letsencrypt.acme.email=admin@connect2home.online
-        - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
+
 
         resources:
           requests:
