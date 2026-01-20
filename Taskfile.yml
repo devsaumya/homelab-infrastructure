@@ -1,0 +1,21 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: list
+
+  list:
+    desc: List all available tasks
+    cmds:
+      - task --list
+
+  lint:
+    desc: Run pre-commit hooks on all files
+    cmds:
+      - pre-commit run --all-files
+
+  clean:
+    desc: Clean up temporary files
+    cmds:
+      - echo "Cleaning..."
