@@ -10,30 +10,16 @@ spec:
     - https://github.com/devsaumya/homelab-infrastructure
 
   destinations:
-    - namespace: cert-manager
-      server: https://kubernetes.default.svc
-    - namespace: ingress-traefik
-      server: https://kubernetes.default.svc
-    - namespace: kube-system
-      server: https://kubernetes.default.svc
-    - namespace: default
-      server: https://kubernetes.default.svc
-    - namespace: dns-system
-      server: https://kubernetes.default.svc
-    - namespace: monitoring
-      server: https://kubernetes.default.svc
-    - namespace: security
-      server: https://kubernetes.default.svc
-    - namespace: cilium-system
+    - namespace: '*'
       server: https://kubernetes.default.svc
 
   clusterResourceWhitelist:
-    - group: ""
-      kind: Namespace
-    - group: networking.k8s.io
-      kind: NetworkPolicy
-    - group: cert-manager.io
-      kind: ClusterIssuer
+    - group: '*'
+      kind: '*'
+
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
 
   roles:
     - name: admin
