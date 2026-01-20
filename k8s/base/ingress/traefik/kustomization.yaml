@@ -6,7 +6,6 @@ namespace: ingress-traefik
 resources:
   - deployment.yaml
   - service.yaml
-  - pvc.yaml
   - configmap.yaml
 
 commonLabels:
