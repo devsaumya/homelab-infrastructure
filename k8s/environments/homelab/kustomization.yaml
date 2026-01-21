@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - base.yaml
   # - apps.yaml
-  # - security.yaml
+  - security.yaml

@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: homelab-security
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: base-infrastructure
   source:
@@ -13,6 +11,6 @@ spec:
     path: k8s/security
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: security
   syncPolicy:
     automated: null
