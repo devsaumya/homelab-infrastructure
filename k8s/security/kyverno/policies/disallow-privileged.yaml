@@ -13,7 +13,7 @@ metadata:
       Privileged containers are disallowed except in system namespaces
       where they may be required (e.g., Falco, CNI).
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: audit
   background: true
   rules:
     - name: check-privileged

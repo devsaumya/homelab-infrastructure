@@ -1,21 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: homelab-apps
+  name: metrics-server
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: applications
+  project: platform
   source:
-    repoURL: https://github.com/devsaumya/homelab-infrastructure
-    targetRevision: master
-    path: k8s/apps
-    directory:
-      recurse: true
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    chart: metrics-server
+    targetRevision: 3.12.1
+    helm:
+      values: |
+        args:
+          - --kubelet-insecure-tls
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: kube-system
   syncPolicy:
     automated:
       prune: true

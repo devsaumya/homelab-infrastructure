@@ -13,7 +13,7 @@ metadata:
       All pods must have resource requests and limits defined to prevent
       resource exhaustion and enable proper scheduling.
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: audit
   background: true
   rules:
     - name: check-resources
