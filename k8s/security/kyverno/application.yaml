@@ -31,7 +31,8 @@ spec:
             enabled: false
 
         features:
-          policyReports: true
+          policyReports:
+            enabled: true
 
         admissionController:
           replicas: 1
