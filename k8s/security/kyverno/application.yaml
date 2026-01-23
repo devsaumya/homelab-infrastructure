@@ -31,6 +31,12 @@ spec:
 
         cleanupJobs:
           enabled: false
+          admissionReports:
+            image:
+              tag: 1.29.2
+          clusterAdmissionReports:
+            image:
+              tag: 1.29.2
 
         resources:
           requests:
