@@ -15,28 +15,29 @@ spec:
         crds:
           install: false
 
+        cleanupController:
+          enabled: false
+
+        cleanupJobs:
+          admissionReports:
+            enabled: false
+          clusterAdmissionReports:
+            enabled: false
+          clusterEphemeralReports:
+            enabled: false
+          ephemeralReports:
+            enabled: false
+          updateRequests:
+            enabled: false
+
+        features:
+          policyReports: true
+
         admissionController:
           replicas: 1
 
         backgroundController:
           replicas: 1
-
-        cleanupController:
-          enabled: false
-          replicas: 1
-
-        reportsController:
-          enabled: true
-          replicas: 1
-
-        cleanupJobs:
-          enabled: false
-          admissionReports:
-            image:
-              tag: 1.29.2
-          clusterAdmissionReports:
-            image:
-              tag: 1.29.2
 
         resources:
           requests:
