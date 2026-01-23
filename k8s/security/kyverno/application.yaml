@@ -11,6 +11,8 @@ spec:
     chart: kyverno
     targetRevision: 3.2.6
     helm:
+      skipCrds: false
+      parameters: []
       values: |
         crds:
           install: false
@@ -59,3 +61,4 @@ spec:
       allowEmpty: false
     syncOptions:
       - CreateNamespace=true
+      - SkipHooks=true
