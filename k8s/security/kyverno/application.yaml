@@ -11,30 +11,12 @@ spec:
     chart: kyverno
     targetRevision: 3.2.6
     helm:
-      skipCrds: false
-      parameters: []
       values: |
-        crds:
-          install: false
-
         cleanupController:
           enabled: false
 
-        cleanupJobs:
-          admissionReports:
-            enabled: false
-          clusterAdmissionReports:
-            enabled: false
-          clusterEphemeralReports:
-            enabled: false
-          ephemeralReports:
-            enabled: false
-          updateRequests:
-            enabled: false
-
-        features:
-          policyReports:
-            enabled: true
+        reportsController:
+          enabled: true
 
         admissionController:
           replicas: 1
@@ -42,13 +24,8 @@ spec:
         backgroundController:
           replicas: 1
 
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        hooks:
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
