@@ -17,12 +17,15 @@ spec:
     helm:
       values: |
         installCRDs: false
+
         backgroundController:
           enabled: true
-        cleanupController:
-          enabled: true
+
         reportsController:
           enabled: true
+
+        cleanupController:
+          enabled: false
 
   syncPolicy:
     automated:
