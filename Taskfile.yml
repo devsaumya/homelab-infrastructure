@@ -19,3 +19,10 @@ tasks:
     desc: Clean up temporary files
     cmds:
       - echo "Cleaning..."
+
+  fix:argocd-crd:
+    desc: Apply Global CRD Exclusions to ArgoCD and restart
+    cmds:
+      - kubectl patch cm argocd-cm -n argocd --type merge --patch-file k8s/bootstrap/argocd/argocd-cm-patch.yaml
+      - kubectl rollout restart deployment -n argocd
+      - echo "ArgoCD patched and restarting. Please wait ~30s then check ArgoCD UI."
