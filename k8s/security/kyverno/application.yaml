@@ -27,6 +27,16 @@ spec:
         cleanupController:
           enabled: false
 
+        cleanupJobs:
+          admissionReports:
+            enabled: false
+          clusterAdmissionReports:
+            enabled: false
+          ephemeralReports:
+            enabled: false
+          clusterEphemeralReports:
+            enabled: false
+
   syncPolicy:
     automated:
       prune: false
