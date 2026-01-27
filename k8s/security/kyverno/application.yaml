@@ -15,27 +15,14 @@ spec:
     chart: kyverno
     targetRevision: 3.2.6
     helm:
-      values: |
-        installCRDs: false
-
-        backgroundController:
-          enabled: true
-
-        reportsController:
-          enabled: true
-
         cleanupController:
           enabled: false
-
-        cleanupJobs:
-          admissionReports:
-            enabled: false
-          clusterAdmissionReports:
-            enabled: false
-          ephemeralReports:
-            enabled: false
-          clusterEphemeralReports:
-            enabled: false
+        reportsController:
+          enabled: true
+        admissionController:
+          enabled: true
+        backgroundController:
+          enabled: true
 
   syncPolicy:
     automated:
