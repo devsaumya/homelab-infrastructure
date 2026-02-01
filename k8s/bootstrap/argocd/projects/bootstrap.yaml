@@ -4,27 +4,11 @@ metadata:
   name: bootstrap
   namespace: argocd
 spec:
-  description: Bootstrap project for managing the root application (App of Apps)
-
-  sourceRepos:
-    - https://github.com/devsaumya/homelab-infrastructure
-
   destinations:
-    # Allow deploying to argocd namespace (where root app lives)
     - namespace: argocd
       server: https://kubernetes.default.svc
-
-  # Allow managing Application and AppProject resources (cluster-wide)
+  sourceRepos:
+    - '*'
   clusterResourceWhitelist:
-    - group: argoproj.io
-      kind: Application
-    - group: argoproj.io
-      kind: AppProject
-
-  roles:
-    - name: admin
-      policies:
-        - p, proj:bootstrap:admin, applications, *, bootstrap/*, allow
-        - p, proj:bootstrap:admin, repositories, get, *, allow
-      groups:
-        - homelab-admins
+    - group: '*'
+      kind: '*'
